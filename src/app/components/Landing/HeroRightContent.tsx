@@ -1,4 +1,4 @@
-// HeroRightContent.tsx
+"use client"
 import React, { useCallback } from "react";
 import { motion, Variants, PanInfo } from "framer-motion";
 import CardDisplay from "../utils/CardDisplay";

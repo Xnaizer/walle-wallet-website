@@ -1,4 +1,4 @@
-// FeaturesSection.tsx
+
 "use client";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";

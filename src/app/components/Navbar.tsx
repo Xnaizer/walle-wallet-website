@@ -162,7 +162,7 @@ export default function Navbar() {
               
               <motion.div 
                 initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 1, scale: 0.8 }}
                 transition={{ delay: 0.8 }}
                 className="ml-6"
               >
@@ -171,7 +171,7 @@ export default function Navbar() {
                   size="md"
                   onClick={() => smoothScrollTo('#cta')}
                 >
-                  Get Started
+                  Dashboard
                 </MagneticButton>
               </motion.div>
             </div>
@@ -287,7 +287,7 @@ export default function Navbar() {
                     className="w-full justify-center py-4 text-lg font-bold"
                     onClick={() => smoothScrollTo('#cta')}
                   >
-                    Get Started
+                    Dashboard
                   </MagneticButton>
                 </motion.div>
               </div>

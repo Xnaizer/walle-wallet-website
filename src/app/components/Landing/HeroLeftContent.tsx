@@ -1,4 +1,4 @@
-// HeroLeftContent.tsx
+"use client"
 import React from "react";
 import { motion, Variants } from "framer-motion";
 import { ArrowRightIcon, PlayCircleIcon } from "@heroicons/react/24/outline";

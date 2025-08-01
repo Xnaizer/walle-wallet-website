@@ -1,4 +1,4 @@
-// CTASection.tsx
+
 "use client";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
@@ -127,7 +127,7 @@ export default function CTASection() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-white mb-4 leading-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight">
               Ready to Transform Your Payments?
             </h2>
           </motion.div>

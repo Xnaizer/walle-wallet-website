@@ -1,4 +1,4 @@
-// HeroSection.tsx
+
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
 import { motion, useAnimation, Variants } from "framer-motion";
