@@ -2,128 +2,198 @@
 "use client";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { CreditCardIcon } from "@heroicons/react/24/outline";
+import { 
+  CreditCardIcon,
+  MapPinIcon,
+  EnvelopeIcon,
+  PhoneIcon
+} from "@heroicons/react/24/outline";
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const isInView = useInView(footerRef, { once: true, margin: "-10%" });
   
   const footerLinks = {
-    Product: ["Features", "How It Works", "Pricing", "Security"],
-    Company: ["About", "Blog", "Careers", "Press"],
-    Resources: ["Documentation", "Help Center", "Community", "Status"],
-    Legal: ["Privacy", "Terms", "Cookies", "Licenses"],
+    Product: ["Features", "How It Works", "Pricing", "Security", "API"],
+    Company: ["About", "Blog", "Careers", "Press", "Partners"],
+    Resources: ["Documentation", "Help Center", "Community", "Status", "Whitepaper"],
+    Legal: ["Privacy Policy", "Terms of Service", "Cookie Policy", "Compliance"],
   };
 
   const socialIcons = [
-    { name: "Twitter", icon: "𝕏" },
-    { name: "Discord", icon: "🎮" },
-    { name: "Telegram", icon: "📱" },
-    { name: "LinkedIn", icon: "🔗" },
+    { name: "Twitter", icon: "𝕏", href: "#", color: "hover:bg-blue-600" },
+    { name: "Discord", icon: "💬", href: "#", color: "hover:bg-purple-600" },
+    { name: "Telegram", icon: "📱", href: "#", color: "hover:bg-blue-500" },
+    { name: "LinkedIn", icon: "💼", href: "#", color: "hover:bg-blue-700" },
   ];
 
   return (
-    <footer ref={footerRef} className="bg-neutral-900 text-white pt-20 pb-10">
-      <div className="container-custom">
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-10">
-          {/* Logo and Description */}
+    <footer ref={footerRef} className="bg-white text-neutral-800 relative overflow-hidden ">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-10 w-40 h-40 bg-blue-500 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-20 w-60 h-60 bg-primary-500 rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto max-w-7xl px-6 pt-20 pb-10 relative z-10">
+
+                {/* Newsletter Subscription */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 mb-42 border border-blue-200"
+        >
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 className="text-2xl font-bold mb-3 text-neutral-800">Stay Updated</h3>
+              <p className="text-neutral-600">
+                Get the latest updates about Walle Wallet features, partnerships, and blockchain innovations.
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-3 rounded-xl bg-white border border-neutral-300 text-neutral-800 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <motion.button
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold transition-colors duration-300 whitespace-nowrap"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Subscribe
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+
+        
+        {/* Main Footer Content */}
+        <div className="grid lg:grid-cols-12 gap-12 mb-16">
+          
+          {/* Company Info - Takes more space */}
           <motion.div
-            className="lg:col-span-2"
-            initial={{ opacity: 0, y: 20 }}
+            className="lg:col-span-4"
+            initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
+            {/* Logo */}
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center">
-                <CreditCardIcon className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                <CreditCardIcon className="w-7 h-7 text-white" />
               </div>
-              <span className="text-2xl font-bold">Walle Wallet</span>
+              <span className="text-3xl font-black text-neutral-800">Walle Wallet</span>
             </div>
 
-            <p className="text-neutral-400 mb-6 max-w-md">
-              Your everyday payment card and wallet. Tap. Pay. Done. Crypto
-              Anywhere with NFC-enabled cards for seamless transactions in over 200 countries.
+            <p className="text-neutral-600 mb-8 text-md leading-relaxed">
+              Your everyday payment card and crypto wallet. Tap. Pay. Done. 
+              Experience seamless transactions in over 200 countries with our NFC-enabled cards.
             </p>
 
+            {/* Contact Info */}
+            <div className="space-y-4 mb-8">
+              <div className="flex items-center gap-3 text-neutral-600">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <MapPinIcon className="w-4 h-4 text-blue-600" />
+                </div>
+                <span className="text-sm">San Francisco, CA 94102</span>
+              </div>
+              <div className="flex items-center gap-3 text-neutral-600">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <EnvelopeIcon className="w-4 h-4 text-blue-600" />
+                </div>
+                <span className="text-sm">hello@wallewallet.com</span>
+              </div>
+              <div className="flex items-center gap-3 text-neutral-600">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <PhoneIcon className="w-4 h-4 text-blue-600" />
+                </div>
+                <span className="text-sm">+1 (555) 123-4567</span>
+              </div>
+            </div>
+
+            {/* Social Icons */}
             <div className="flex space-x-4">
               {socialIcons.map((social, index) => (
                 <motion.a
                   key={social.name}
-                  href="#"
-                  className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center hover:bg-primary-700 transition-colors duration-200"
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.9 }}
-                  aria-label={social.name}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  href={social.href}
+                  className={`w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center ${social.color} transition-all duration-300 border border-neutral-200 hover:border-blue-300 hover:text-white`}
+                  whileHover={{ scale: 1.1, y: -3 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
                 >
-                  <span className="text-lg">{social.icon}</span>
+                  <span className="text-xl text-neutral-700">{social.icon}</span>
                 </motion.a>
               ))}
             </div>
           </motion.div>
 
           {/* Footer Links */}
-          {Object.entries(footerLinks).map(
-            ([category, links], categoryIndex) => (
+          <div className="lg:col-span-8 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {Object.entries(footerLinks).map(([category, links], categoryIndex) => (
               <motion.div
                 key={category}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.2 + categoryIndex * 0.1 }}
               >
-                <h3 className="text-lg font-semibold mb-4 text-white">{category}</h3>
-                <ul className="space-y-3">
+                <h3 className="text-xl font-bold mb-6 text-neutral-800">{category}</h3>
+                <ul className="space-y-4">
                   {links.map((link, linkIndex) => (
                     <li key={linkIndex}>
                       <motion.a
                         href="#"
-                        className="text-neutral-400 hover:text-white transition-colors duration-200"
+                        className="text-neutral-600 hover:text-blue-600 transition-all duration-300 text-sm font-medium flex items-center group"
                         whileHover={{ x: 5 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
+                        <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         {link}
                       </motion.a>
                     </li>
                   ))}
                 </ul>
               </motion.div>
-            )
-          )}
+            ))}
+          </div>
         </div>
+
 
         {/* Bottom Bar */}
         <motion.div
-          className="border-t border-neutral-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center"
+          className="border-t border-neutral-200 pt-8 flex flex-col lg:flex-row justify-between items-center gap-6"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
         >
-          <p className="text-neutral-400 text-sm mb-4 md:mb-0">
-            © 2025 Walle Wallet. All rights reserved.
-          </p>
-          <div className="flex items-center space-x-6 text-sm text-neutral-400">
-            <a
-              href="#"
-              className="hover:text-white transition-colors duration-200"
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="#"
-              className="hover:text-white transition-colors duration-200"
-            >
-              Terms of Service
-            </a>
-            <a
-              href="#"
-              className="hover:text-white transition-colors duration-200"
-            >
-              Cookie Policy
-            </a>
+          <div className="flex flex-col lg:flex-row items-center gap-6">
+            <p className="text-neutral-600 text-sm">
+              © 2025 Walle Wallet. All rights reserved.
+            </p>
+          </div>
+          
+          <div className="flex items-center space-x-8 text-sm">
+            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((link, index) => (
+              <motion.a
+                key={link}
+                href="#"
+                className="text-neutral-600 hover:text-blue-600 transition-colors duration-300 font-medium"
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2 }}
+              >
+                {link}
+              </motion.a>
+            ))}
           </div>
         </motion.div>
+
+
+
       </div>
     </footer>
   );
