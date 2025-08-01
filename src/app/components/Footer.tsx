@@ -38,7 +38,6 @@ export default function Footer() {
 
       <div className="container mx-auto max-w-7xl px-6 pt-20 pb-10 relative z-10">
 
-                {/* Newsletter Subscription */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}

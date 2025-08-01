@@ -188,7 +188,7 @@ export default function CTASection() {
                 <motion.a
                   key={button.platform}
                   href={button.href}
-                  className="flex items-center gap-3 px-4 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl hover:bg-white/20 transition-all duration-300 group w-full sm:w-auto"
+                  className="flex items-center gap-3 px-4 py-3 bg-white/10 backdrop-blur-xl  border-white/20 rounded-xl hover:bg-white/20 transition-all duration-300 group w-full sm:w-auto"
                   initial={{ opacity: 0, y: 10 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.6, delay: 1.1 + index * 0.1 }}
@@ -226,7 +226,7 @@ export default function CTASection() {
               {trustIndicators.map((indicator, index) => (
                 <motion.div
                   key={index}
-                  className="flex flex-col items-center text-center p-6 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10  "
+                  className="flex flex-col items-center text-center p-6 bg-white/5 backdrop-blur-xl rounded-2xl  border-white/10  "
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ 
