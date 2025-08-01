@@ -79,7 +79,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center pt-24 bg-white">
+    <section className="relative min-h-screen flex items-center pt-18 bg-white">
       {/* Payment Success Overlay */}
       {showPaymentSuccess && (
         <motion.div
