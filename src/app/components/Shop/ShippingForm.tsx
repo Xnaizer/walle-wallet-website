@@ -75,6 +75,7 @@ export default function ShippingForm() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  console.log(validateForm);
 
   if (!state.selectedCard) {
     return (

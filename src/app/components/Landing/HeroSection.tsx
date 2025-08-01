@@ -8,7 +8,7 @@ import HeroRightContent from "./HeroRightContent";
 
 export default function HeroSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isVisible, setIsVisible] = useState(false);
+  const [_isVisible, setIsVisible] = useState(false);
   const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [isCardNearTarget, setIsCardNearTarget] = useState(false);

@@ -14,7 +14,7 @@ import WalleLogo from "../../../public/walle_logo.png";
 export default function NavbarMock() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const [activeSection, setActiveSection] = useState<string>("hero");
+  const [_activeSection, setActiveSection] = useState<string>("hero");
   const { scrollYProgress } = useScroll();
 
   const navbarOpacity = useTransform(
