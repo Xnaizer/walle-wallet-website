@@ -3,13 +3,101 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Walle Wallet Primary Colors (Blues) */
+  --primary-50: #f9fcff;
+  --primary-100: #f2f8fe;
+  --primary-200: #e9f4fe;
+  --primary-300: #d7ebfd;
+  --primary-400: #bbdefb;    /* uranian_blue */
+  --primary-500: #90caf9;    /* light_sky_blue */
+  --primary-600: #64b5f6;    /* argentinian_blue */
+  --primary-700: #42a5f5;    /* argentinian_blue variant */
+  --primary-800: #2196f3;    /* dodger_blue */
+  --primary-900: #1e88e5;    /* bleu_de_france */
+  --primary-950: #1976d2;    /* french_blue */
+  
+  /* Deep Blue Palette */
+  --blue-400: #1565c0;       /* green_blue */
+  --blue-700: #00509d;       /* polynesian_blue */
+  --blue-800: #11296b;       /* royal_blue_traditional */
+  --blue-900: #0d47a1;       /* cobalt_blue */
+  
+  /* Walle Wallet Secondary Colors (Yellow/Gold) */
+  --secondary-50: #fff8dd;   /* mustard light */
+  --secondary-100: #fff0bc;
+  --secondary-200: #ffe99a;
+  --secondary-300: #ffe278;
+  --secondary-400: #ffdb57;  /* mustard */
+  --secondary-500: #ffcb05;  /* jonquil */
+  --secondary-600: #d0a600;
+  --secondary-700: #9c7d00;
+  --secondary-800: #685300;
+  --secondary-900: #342a00;
+  
+  /* Neutral Colors */
+  --neutral-50: #fbfbfb;     /* anti-flash_white light */
+  --neutral-100: #f8f8f8;
+  --neutral-200: #f4f4f4;
+  --neutral-300: #f1f1f1;
+  --neutral-400: #ededed;    /* anti-flash_white */
+  --neutral-500: #bebebe;
+  --neutral-600: #8e8e8e;
+  --neutral-700: #5f5f5f;
+  --neutral-800: #2f2f2f;
+  --neutral-900: #171717;
+  
+  --radius: 0.75rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+  
+  /* Primary Colors */
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+  
+  /* Deep Blue Colors */
+  --color-blue-400: var(--blue-400);
+  --color-blue-700: var(--blue-700);
+  --color-blue-800: var(--blue-800);
+  --color-blue-900: var(--blue-900);
+  
+  /* Secondary Colors */
+  --color-secondary-50: var(--secondary-50);
+  --color-secondary-100: var(--secondary-100);
+  --color-secondary-200: var(--secondary-200);
+  --color-secondary-300: var(--secondary-300);
+  --color-secondary-400: var(--secondary-400);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-600: var(--secondary-600);
+  --color-secondary-700: var(--secondary-700);
+  --color-secondary-800: var(--secondary-800);
+  --color-secondary-900: var(--secondary-900);
+  
+  /* Neutral Colors */
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +107,714 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Enhanced Keyframes for Walle Wallet */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(60px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes walletFloat {
+  0%, 100% { 
+    transform: translateY(0px) translateX(0px) rotateY(0deg); 
+  }
+  25% { 
+    transform: translateY(-15px) translateX(10px) rotateY(5deg); 
+  }
+  50% { 
+    transform: translateY(-25px) translateX(-5px) rotateY(-3deg); 
+  }
+  75% { 
+    transform: translateY(-10px) translateX(15px) rotateY(7deg); 
+  }
+}
+
+@keyframes cardFlip {
+  0% { transform: perspective(1000px) rotateY(0deg); }
+  50% { transform: perspective(1000px) rotateY(180deg); }
+  100% { transform: perspective(1000px) rotateY(360deg); }
+}
+
+@keyframes paymentPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.3);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 203, 5, 0.6);
+  }
+}
+
+@keyframes cryptoWave {
+  0%, 100% { 
+    background-position: 0% 50%;
+    transform: scale(1);
+  }
+  33% { 
+    background-position: 50% 25%;
+    transform: scale(1.02);
+  }
+  66% { 
+    background-position: 100% 75%;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes textShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes glowBlue {
+  0% { box-shadow: 0 0 20px rgba(33, 150, 243, 0.4); }
+  100% { box-shadow: 0 0 50px rgba(30, 136, 229, 0.8); }
+}
+
+@keyframes glowYellow {
+  0% { box-shadow: 0 0 20px rgba(255, 203, 5, 0.4); }
+  100% { box-shadow: 0 0 50px rgba(255, 219, 87, 0.8); }
+}
+
+@keyframes bounceGentle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(2deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  33% { transform: translateY(-30px) translateX(15px); }
+  66% { transform: translateY(15px) translateX(-10px); }
+}
+
+@keyframes rotateSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes tilt {
+  0%, 50%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(1deg); }
+  75% { transform: rotate(-1deg); }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes parallaxSlow {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-50px) translateX(25px); }
+}
+
+@keyframes parallaxFast {
+  0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  50% { transform: translateY(-80px) translateX(-40px) rotate(180deg); }
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+
+/* Subtle noise texture */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232196f3' fill-opacity='1'%3E%3Ccircle cx='7' cy='7' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Enhanced Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  background: linear-gradient(135deg, 
+    var(--primary-800) 0%, 
+    var(--primary-600) 30%, 
+    var(--secondary-500) 70%, 
+    var(--primary-900) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+h1 {
+  background: linear-gradient(135deg, 
+    var(--primary-900) 0%, 
+    var(--primary-700) 50%, 
+    var(--secondary-500) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Enhanced Utility Classes */
+.container-custom {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-custom {
+    padding: 0 2rem;
+  }
+}
+
+.section-padding {
+  padding: 5rem 0;
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding: 8rem 0;
+  }
+}
+
+/* Enhanced Typography Classes */
+.text-hero {
+  font-size: clamp(3rem, 8vw, 8rem);
+  line-height: 0.9;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, 
+    var(--primary-900), 
+    var(--primary-600), 
+    var(--secondary-500)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 12s ease-in-out infinite;
+}
+
+.text-display {
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.text-heading {
+  font-size: clamp(1.5rem, 4vw, 4rem);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Walle Wallet Specific Components */
+.walle-glass {
+  background: linear-gradient(135deg, 
+    rgba(33, 150, 243, 0.12), 
+    rgba(30, 136, 229, 0.08), 
+    rgba(255, 255, 255, 0.05)
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(33, 150, 243, 0.2);
+  border-radius: 1.5rem;
+  box-shadow: 
+    0 8px 32px rgba(33, 150, 243, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 4px 16px rgba(255, 203, 5, 0.1);
+}
+
+.walle-glass-dark {
+  background: linear-gradient(135deg, 
+    rgba(17, 41, 107, 0.3), 
+    rgba(13, 71, 161, 0.2), 
+    rgba(0, 0, 0, 0.1)
+  );
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 1.5rem;
+}
+
+.walle-card {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 255, 255, 0.85) 50%, 
+    rgba(249, 252, 255, 0.9) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(33, 150, 243, 0.15);
+  border-radius: 1.5rem;
+  box-shadow: 
+    0 10px 50px rgba(33, 150, 243, 0.15),
+    0 5px 20px rgba(255, 203, 5, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.walle-card:hover {
+  transform: translateY(-8px) rotateX(2deg);
+  box-shadow: 
+    0 20px 60px rgba(33, 150, 243, 0.2),
+    0 10px 30px rgba(255, 203, 5, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.text-shimmer {
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(33, 150, 243, 0.8), 
+    rgba(255, 203, 5, 0.6),
+    transparent
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShimmer 3s ease-in-out infinite;
+}
+
+.walle-shimmer {
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(33, 150, 243, 0.4), 
+    rgba(255, 203, 5, 0.3),
+    transparent
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShimmer 4s ease-in-out infinite;
+}
+
+.gradient-mesh {
+  background: 
+    radial-gradient(at 20% 30%, rgba(33, 150, 243, 0.8) 0px, transparent 50%),
+    radial-gradient(at 80% 20%, rgba(255, 203, 5, 0.6) 0px, transparent 50%),
+    radial-gradient(at 40% 70%, rgba(30, 136, 229, 0.7) 0px, transparent 50%),
+    radial-gradient(at 90% 80%, rgba(255, 219, 87, 0.5) 0px, transparent 50%),
+    radial-gradient(at 10% 90%, rgba(25, 118, 210, 0.6) 0px, transparent 50%);
+}
+
+/* Enhanced Interaction Effects */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px) rotateX(2deg) scale(1.02);
+  box-shadow: 
+    0 20px 50px rgba(33, 150, 243, 0.2),
+    0 10px 25px rgba(255, 203, 5, 0.1);
+}
+
+.magnetic-hover {
+  transition: transform 0.2s ease-out;
+  cursor: pointer;
+}
+
+.magnetic-hover:hover {
+  transform: scale(1.02) translateY(-2px);
+}
+
+.walle-magnetic:hover {
+  transform: scale(1.05) translateY(-4px) rotateY(5deg);
+  box-shadow: 
+    0 15px 40px rgba(33, 150, 243, 0.25),
+    0 5px 15px rgba(255, 203, 5, 0.15);
+}
+
+/* Enhanced Button Styles */
+.btn-primary {
+  background: linear-gradient(135deg, 
+    var(--primary-800) 0%, 
+    var(--primary-600) 50%, 
+    var(--primary-700) 100%
+  );
+  color: white;
+  padding: 1rem 2.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  box-shadow: 
+    0 10px 30px rgba(33, 150, 243, 0.4),
+    0 4px 15px rgba(30, 136, 229, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 20px 50px rgba(33, 150, 243, 0.5),
+    0 8px 25px rgba(30, 136, 229, 0.4);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, 
+    var(--secondary-500) 0%, 
+    var(--secondary-400) 50%, 
+    var(--secondary-600) 100%
+  );
+  color: var(--neutral-900);
+  padding: 1rem 2.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  box-shadow: 
+    0 10px 30px rgba(255, 203, 5, 0.4),
+    0 4px 15px rgba(255, 219, 87, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 20px 50px rgba(255, 203, 5, 0.5),
+    0 8px 25px rgba(255, 219, 87, 0.4);
+}
+
+.btn-glass {
+  background: linear-gradient(135deg, 
+    rgba(33, 150, 243, 0.1), 
+    rgba(255, 255, 255, 0.1), 
+    rgba(30, 136, 229, 0.05)
+  );
+  backdrop-filter: blur(20px);
+  color: var(--primary-800);
+  padding: 1rem 2.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  border: 1px solid rgba(33, 150, 243, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+}
+
+.btn-glass:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: linear-gradient(135deg, 
+    rgba(33, 150, 243, 0.15), 
+    rgba(255, 255, 255, 0.15), 
+    rgba(30, 136, 229, 0.1)
+  );
+  box-shadow: 0 20px 40px rgba(33, 150, 243, 0.2);
+}
+
+.payment-button {
+  background: linear-gradient(135deg, 
+    var(--primary-800), 
+    var(--primary-600), 
+    var(--primary-700)
+  );
+  border-radius: 9999px;
+  padding: 1.25rem 3rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: white;
+  box-shadow: 
+    0 12px 35px rgba(33, 150, 243, 0.4),
+    0 6px 20px rgba(30, 136, 229, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-button:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 
+    0 25px 60px rgba(33, 150, 243, 0.5),
+    0 10px 30px rgba(30, 136, 229, 0.4);
+}
+
+.payment-button:active {
+  animation: paymentPulse 0.6s ease-in-out;
+}
+
+/* Enhanced Card Styles */
+.card-interactive {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(249, 252, 255, 0.9) 50%, 
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(33, 150, 243, 0.12);
+  border-radius: 2rem;
+  padding: 2.5rem;
+  box-shadow: 
+    0 12px 40px rgba(33, 150, 243, 0.12),
+    0 6px 20px rgba(255, 203, 5, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.card-interactive:hover {
+  transform: translateY(-10px) rotateX(3deg) scale(1.02);
+  box-shadow: 
+    0 25px 60px rgba(33, 150, 243, 0.18),
+    0 12px 30px rgba(255, 203, 5, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.crypto-card {
+  background: linear-gradient(135deg, 
+    rgba(33, 150, 243, 0.05) 0%,
+    rgba(255, 255, 255, 0.95) 30%,
+    rgba(255, 203, 5, 0.05) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 2px solid;
+  border-image: linear-gradient(135deg, 
+    rgba(33, 150, 243, 0.3), 
+    rgba(255, 203, 5, 0.2)
+  ) 1;
+  border-radius: 2rem;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.crypto-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(33, 150, 243, 0.1), 
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.crypto-card:hover::before {
+  left: 100%;
+}
+
+.crypto-card:hover {
+  animation: cryptoWave 2s ease-in-out;
+}
+
+/* Animation Classes */
+.animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+.animate-slideUp { animation: slideUp 0.8s ease-out forwards; }
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-wallet-float { animation: walletFloat 8s ease-in-out infinite; }
+.animate-glow-blue { animation: glowBlue 2s ease-in-out infinite alternate; }
+.animate-glow-yellow { animation: glowYellow 2s ease-in-out infinite alternate; }
+.animate-bounce-gentle { animation: bounceGentle 3s ease-in-out infinite; }
+.animate-gradient-shift { animation: gradientShift 8s ease-in-out infinite; }
+.animate-payment-pulse { animation: paymentPulse 1.5s ease-in-out infinite; }
+.animate-crypto-wave { animation: cryptoWave 4s ease-in-out infinite; }
+.animate-card-flip { animation: cardFlip 1.2s ease-in-out; }
+
+/* Custom Scrollbar with Walle theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--primary-100);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, 
+    var(--primary-600), 
+    var(--primary-500)
+  );
+  border-radius: 4px;
+  border: 1px solid var(--primary-200);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, 
+    var(--primary-700), 
+    var(--primary-600)
+  );
+}
+
+/* Enhanced Selection */
+::selection {
+  background: linear-gradient(135deg, 
+    rgba(33, 150, 243, 0.3), 
+    rgba(255, 203, 5, 0.2)
+  );
+  color: var(--primary-900);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .section-padding {
+    padding: 3rem 0;
+  }
+  
+  .container-custom {
+    padding: 0 1rem;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-glass {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+  
+  .payment-button {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+  }
+  
+  .card-interactive {
+    padding: 1.5rem;
+  }
+  
+  .text-hero {
+    font-size: clamp(2.5rem, 12vw, 5rem);
+  }
+}
+
+/* Loading states with Walle theme */
+@keyframes walleShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.walle-shimmer-loading {
+  background: linear-gradient(90deg, 
+    var(--neutral-200) 25%, 
+    var(--primary-100) 50%, 
+    var(--neutral-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: walleShimmer 1.5s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+/* Focus states for accessibility */
+.btn-primary:focus,
+.btn-secondary:focus,
+.btn-glass:focus,
+.payment-button:focus {
+  outline: 3px solid rgba(33, 150, 243, 0.5);
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  body::before,
+  body::after {
+    display: none;
+  }
+  
+  .animate-float,
+  .animate-wallet-float,
+  .animate-glow-blue,
+  .animate-glow-yellow {
+    animation: none;
+  }
+}
+
+main > section {
+  background-color: white;
+}
+
+/* Loading states */
+.loading-section {
+  background-color: white;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Override any default backgrounds */
+* {
+  box-sizing: border-box;
+}
+
+/* Smooth scrolling for better UX */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background-color: #dbeafe; /* primary-100 */
+  color: #1e3a8a; /* primary-900 */
 }
