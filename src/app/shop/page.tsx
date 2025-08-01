@@ -1,4 +1,5 @@
 
+import NavbarMock from "../components/NavbarMock";
 import ShopPage from "../components/Shop/ShopPage";
 
 export const metadata = {
@@ -7,5 +8,10 @@ export const metadata = {
 };
 
 export default function Shop() {
-  return <ShopPage />;
+  return (
+    <>
+    <NavbarMock />
+    <ShopPage />
+    </>
+  );
 }

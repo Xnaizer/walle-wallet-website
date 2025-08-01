@@ -19,7 +19,27 @@ const config: Config = {
     },
     extend: {
       colors: {
-        // Blue Palette - Primary
+
+
+        walle: {
+          // Primary palette
+          'dark-blue': '#11296b',
+          'ocean-blue': '#00509d',
+          'light-gray': '#ededed',
+          'gold-yellow': '#ffdb57',
+          'bright-yellow': '#ffcb05',
+          // Secondary palette
+          'navy': '#03045e',
+          'deep-blue': '#023e8a',
+          'royal-blue': '#0077b6',
+          'sky-blue': '#0096c7',
+          'cyan': '#00b4d8',
+          'bright-cyan': '#48cae4',
+          'light-cyan': '#90e0ef',
+          'pale-cyan': '#ade8f4',
+          'ice-blue': '#caf0f8',
+        },
+
         primary: {
           50: '#f9fcff',      // lightest blue
           100: '#f2f8fe',     
@@ -354,6 +374,9 @@ const config: Config = {
         'crypto-gradient': `conic-gradient(from 0deg, #2196f3, #42a5f5, #ffcb05, #1e88e5, #2196f3)`,
         'glass-blue': `linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(30, 136, 229, 0.05))`,
         'glass-yellow': `linear-gradient(135deg, rgba(255, 203, 5, 0.1), rgba(255, 219, 87, 0.05))`,
+        'walle-gradient': 'linear-gradient(135deg, #11296b 0%, #00509d 100%)',
+        'walle-card': 'linear-gradient(135deg, #03045e 0%, #0077b6 50%, #48cae4 100%)',
+        'walle-soft': 'linear-gradient(135deg, #caf0f8 0%, #ade8f4 100%)',
       },
       spacing: {
         '18': '4.5rem',

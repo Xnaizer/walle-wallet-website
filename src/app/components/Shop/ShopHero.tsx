@@ -20,7 +20,7 @@ export default function ShopHero() {
   ];
 
   return (
-    <section className="relative bg-gradient-to-r from-primary-600 to-primary-800 text-white py-16">
+    <section className="relative bg-gradient-to-r from-primary-600 to-primary-800 text-white pt-10 pb-16">
       <div className="absolute inset-0 bg-black/10"></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
