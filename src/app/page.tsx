@@ -6,9 +6,9 @@ import Navbar from "./components/Navbar";
 import HeroSection from "./components/Landing/HeroSection";
 import ProblemSection from "./components/Landing/ProblemSection";
 import SolutionSection from "./components/Landing/SolutionSection";
-import CardDisplay from "./components/utils/CardDisplay";
+// import CardDisplay from "./components/utils/CardDisplay";
 
-// Lazy load heavier components
+
 const HowItWorksSection = dynamic(() => import("./components/Landing/HowItWorksSection"), {
   loading: () => <SectionLoader />
 });
@@ -25,7 +25,7 @@ const Footer = dynamic(() => import("./components/Footer"), {
   loading: () => <SectionLoader />
 });
 
-// Improved loading component
+
 const SectionLoader = () => (
   <div className="w-full h-80 flex items-center justify-center">
     <div className="relative w-12 h-12">

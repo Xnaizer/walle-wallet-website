@@ -100,17 +100,17 @@ export default function HeroSection() {
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 400 }}
             >
-              <CheckCircleIcon className="w-16 h-16 text-green-500 mx-auto mb-4" />
+              <CheckCircleIcon className="w-16 h-16 text-blue-500 mx-auto mb-4" />
             </motion.div>
-            <h3 className="text-2xl font-bold text-neutral-900 mb-2">Payment Successful!</h3>
-            <p className="text-neutral-600 mb-4">Your crypto transaction has been completed</p>
+            <h2 className="text-2xl font-bold text-neutral-900 mb-2">Walle World!</h2>
+            <p className="text-neutral-600 mb-4">Your Everyday Payment Card and Wallet</p>
             <div className="flex items-center justify-center gap-2 text-sm text-green-600">
               <motion.div
                 className="w-2 h-2 bg-green-500 rounded-full"
                 animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
               />
-              <span>Transaction confirmed</span>
+              <span>Welcome To Walle</span>
             </div>
           </motion.div>
         </motion.div>
@@ -156,13 +156,13 @@ export default function HeroSection() {
         transition={{ duration: 0.8, delay: 1.5 }}
       >
         <motion.button
-          className="flex flex-col items-center gap-2 text-neutral-400 hover:text-primary-600 transition-colors cursor-pointer group"
+          className="flex flex-col items-center gap-2 text-neutral-500 hover:text-primary-600 transition-colors cursor-pointer group"
           whileHover={{ y: -2 }}
           onClick={handleScrollClick}
         >
           <div className="w-6 h-10 border-2 border-current rounded-full flex justify-center relative">
             <motion.div
-              className="w-1 h-3 bg-current rounded-full mt-2"
+              className="w-1 h-3 bg-neutral-600 rounded-full mt-2"
               animate={{ 
                 y: [0, 10, 0],
                 opacity: [0.4, 1, 0.4],

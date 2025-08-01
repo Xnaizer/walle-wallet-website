@@ -1,16 +1,14 @@
-// SolutionSection.tsx
 "use client";
 import React, { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import {
   ShieldCheckIcon,
   BoltIcon,
   GlobeAltIcon,
   CreditCardIcon,
   CheckCircleIcon,
+  SparklesIcon,
 } from "@heroicons/react/24/outline";
-import GlowCard from "../utils/GlowCard";
-import ParallaxSection from "../utils/ParallaxSection";
 
 interface Feature {
   title: string;
@@ -19,284 +17,165 @@ interface Feature {
   icon: React.ReactNode;
   color: string;
   benefits: string[];
+  number: string;
 }
 
 export default function SolutionSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: false, margin: "-20%" });
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  
-  // Parallax effects
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 1, 0.5, 1],
-      },
-    },
-  };
+  const isInView = useInView(sectionRef, { once: true, margin: "-20%" });
 
   const features: Feature[] = [
     {
-      title: "Simple",
-      subtitle: "Tap & Pay",
-      description: "NFC cards that work exactly like your regular debit cards at any contactless terminal worldwide.",
-      icon: <CreditCardIcon className="w-6 h-6" />,
-      color: "bg-gradient-to-br from-primary-600 to-primary-700",
-      benefits: ["No learning curve", "Works everywhere", "Instant setup"]
+      number: "01",
+      title: "Tap & Go",
+      subtitle: "No Apps, No Hassle",
+      description: "Your crypto becomes as easy to spend as cash. Just tap your card at millions of locations worldwide.",
+      icon: <CreditCardIcon className="w-8 h-8" />,
+      color: "blue",
+      benefits: ["Works at 50M+ merchants", "No smartphone needed", "Instant card delivery"]
     },
     {
-      title: "Protected",
-      subtitle: "Bank-Level Security",
-      description: "Military-grade encryption, biometric authentication, and real-time fraud detection keep your funds secure.",
-      icon: <ShieldCheckIcon className="w-6 h-6" />,
-      color: "bg-gradient-to-br from-green-500 to-green-600",
-      benefits: ["Multi-factor auth", "Fraud protection", "Remote disable"]
+      number: "02", 
+      title: "Fort Knox Security",
+      subtitle: "Military-Grade Protection",
+      description: "Your funds are protected by the same security used by banks and governments. Sleep peacefully.",
+      icon: <ShieldCheckIcon className="w-8 h-8" />,
+      color: "primary",
+      benefits: ["Biometric authentication", "Real-time fraud detection", "Insurance coverage"]
     },
     {
-      title: "Rapid",
-      subtitle: "Lightning-Fast",
-      description: "Transactions complete in milliseconds, not minutes, with our optimized blockchain technology.",
-      icon: <BoltIcon className="w-6 h-6" />,
-      color: "bg-gradient-to-br from-secondary-500 to-secondary-600",
-      benefits: ["Sub-second finality", "Low fees", "High throughput"]
+      number: "03",
+      title: "Lightning Speed",
+      subtitle: "Faster Than Cash",
+      description: "Transactions settle in under 3 seconds. Say goodbye to waiting for payments to clear.",
+      icon: <BoltIcon className="w-8 h-8" />,
+      color: "secondary",
+      benefits: ["Sub-3 second settlement", "0.1% transaction fee", "99.99% uptime guaranteed"]
     },
     {
-      title: "Global",
-      subtitle: "No Borders",
-      description: "Use your card in any country without worrying about exchange rates or international fees.",
-      icon: <GlobeAltIcon className="w-6 h-6" />,
-      color: "bg-gradient-to-br from-blue-500 to-blue-600",
-      benefits: ["200+ countries", "No forex fees", "Multi-currency"]
+      number: "04",
+      title: "Borderless Money",
+      subtitle: "One Card, Everywhere",
+      description: "Travel the world with one card. No foreign exchange fees, no currency conversion headaches.",
+      icon: <GlobeAltIcon className="w-8 h-8" />,
+      color: "blue",
+      benefits: ["200+ countries supported", "0% foreign exchange fees", "Auto currency conversion"]
     },
   ];
 
   return (
-    <section ref={sectionRef} className="section-padding relative overflow-hidden bg-gradient-to-b from-white via-primary-50/20 to-white">
-      {/* Moving Background */}
-      <motion.div 
-        className="absolute inset-0 pointer-events-none z-[-1]"
-        style={{ y: backgroundY }}
-      >
-        <div className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-primary-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-[30vw] h-[30vw] max-w-[400px] max-h-[400px] bg-secondary-500/5 rounded-full blur-3xl" />
-      </motion.div>
+    <section ref={sectionRef} className="py-32 bg-white relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        {/* Large Circle */}
+        <div className="absolute top-20 right-[-20%] w-[600px] h-[600px] bg-blue-50 rounded-full opacity-30" />
+        {/* Small Dots */}
+        <div className="absolute top-40 left-20 w-4 h-4 bg-secondary-400 rounded-full" />
+        <div className="absolute bottom-40 right-40 w-6 h-6 bg-primary-400 rounded-full" />
+        <div className="absolute top-60 left-[60%] w-3 h-3 bg-accent-400 rounded-full" />
+        {/* Lines */}
+        <div className="absolute top-32 left-0 w-32 h-0.5 bg-neutral-200 transform rotate-45" />
+        <div className="absolute bottom-32 right-20 w-24 h-0.5 bg-neutral-200 transform -rotate-45" />
+      </div>
 
-      <div className="container-custom relative z-10">
-        {/* Header */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
-        >
-          <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-100 to-secondary-100 text-primary-700 rounded-full font-medium mb-6 border border-primary-200"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            <span className="text-xl">✨</span>
-            <span>Introducing Our Solution</span>
-          </motion.div>
-
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Meet{" "}
-            <span className="gradient-text">Walle Wallet</span>
+      <div className="container mx-auto max-w-7xl px-6 relative z-10">
+        
+        {/* Creative Header */}
+        <div className="text-center mb-24">
+        
+          <h2 className="text-7xl font-black text-blue-900 mb-6 leading-none tracking-tight">
+            Walle
+            <br />
+            <span className="text-5xl text-neutral-400">Makes Crypto</span>
+            <br />
+            <span className="text-secondary-500">Simple</span>
           </h2>
           
-          <motion.p
-            className="text-xl text-neutral-700 max-w-3xl mx-auto leading-relaxed"
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            We bridge the gap between{" "}
-            <span className="font-semibold text-primary-700">crypto innovation</span> and{" "}
-            <span className="font-semibold text-secondary-700">everyday payment convenience</span>{" "}
-            through a familiar card-based interface powered by cutting-edge blockchain technology.
-          </motion.p>
-        </motion.div>
-        
-        {/* Key Stats */}
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          {[
-            { value: "10M+", label: "Users Ready" },
-            { value: "200+", label: "Countries" },
-            { value: "99.9%", label: "Uptime" },
-            { value: "$5B+", label: "Processed" },
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              className="glass-card p-4 text-center"
-              variants={itemVariants}
-              whileHover={{ y: -5, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <motion.div 
-                className="text-2xl font-bold text-primary-700"
-                animate={{ 
-                  y: [0, -5, 0],
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity, 
-                  delay: index * 0.3,
-                  ease: "easeInOut"
-                }}
-              >
-                {stat.value}
-              </motion.div>
-              <div className="text-sm text-neutral-600 font-medium mt-1">
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+          <div className="max-w-3xl mx-auto">
+            <p className="text-2xl text-neutral-600 font-medium leading-relaxed">
+              The first crypto card that feels like <em>magic</em> but works like <strong>money</strong>
+            </p>
+          </div>
+        </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {features.map((feature, index) => (
-            <ParallaxSection
-              key={feature.title}
-              speed={0.15}
-              direction={index % 2 === 0 ? "up" : "down"}
-            >
+
+
+        {/* Creative Features Layout */}
+        <div className="space-y-16">
+          {features.map((feature, index) => {
+            const isEven = index % 2 === 0;
+            const colorClasses = {
+              blue: "bg-blue-500 text-white",
+              primary: "bg-primary-500 text-white", 
+              secondary: "bg-secondary-500 text-blue-900",
+              accent: "bg-accent-500 text-white"
+            };
+
+            return (
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ 
-                  duration: 0.7, 
-                  delay: 0.2 + index * 0.1,
-                  ease: [0.25, 1, 0.5, 1]
-                }}
-                className="h-full"
+                key={index}
+                initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.7, delay: index * 0.2 }}
+                className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12`}
               >
-                <GlowCard className="h-full p-8 text-center" gradient={index % 2 === 0 ? "primary" : "secondary"}>
-                  {/* Feature Icon */}
-                  <motion.div
-                    className={`w-14 h-14 ${feature.color} rounded-2xl shadow-lg flex items-center justify-center text-white mx-auto mb-6`}
-                    whileHover={{ 
-                      scale: 1.1, 
-                      rotate: 5,
-                      boxShadow: "0 10px 25px rgba(0,0,0,0.1)"
-                    }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    {feature.icon}
-                  </motion.div>
+                {/* Number & Icon Side */}
+                <div className="lg:w-1/2 flex justify-center">
+                  <div className="relative">
+                    {/* Big Number Background */}
+                    <div className="text-[12rem] font-black text-neutral-100 leading-none select-none">
+                      {feature.number}
+                    </div>
+                    
+                    {/* Icon Overlay */}
+                    <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-2xl ${colorClasses[feature.color as keyof typeof colorClasses]} flex items-center justify-center shadow-2xl`}>
+                      {feature.icon}
+                    </div>
+                  </div>
+                </div>
 
-                  {/* Feature Title & Subtitle */}
-                  <h3 className="text-xl font-bold text-neutral-800 mb-1">
-                    {feature.title}
-                  </h3>
+                {/* Content Side */}
+                <div className="lg:w-1/2 text-center lg:text-left">
+                  <div className="mb-6">
+                    <h3 className="text-4xl font-black text-blue-900 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-xl font-semibold text-neutral-500">
+                      {feature.subtitle}
+                    </p>
+                  </div>
                   
-                  <h4 className="text-sm font-medium text-primary-600 mb-4">
-                    {feature.subtitle}
-                  </h4>
-
-                  {/* Feature Description */}
-                  <p className="text-neutral-600 mb-6">
+                  <p className="text-xl text-neutral-700 leading-relaxed mb-8">
                     {feature.description}
                   </p>
 
-                  {/* Feature Benefits */}
-                  <div className="space-y-2">
+                  {/* Benefits with custom styling */}
+                  <div className="space-y-4">
                     {feature.benefits.map((benefit, idx) => (
                       <motion.div
                         key={idx}
-                        className="flex items-center justify-center gap-2 text-sm text-neutral-700"
-                        initial={{ opacity: 0, x: -10 }}
+                        initial={{ opacity: 0, x: -20 }}
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ 
-                          duration: 0.4, 
-                          delay: 0.6 + index * 0.1 + idx * 0.05
-                        }}
+                        transition={{ duration: 0.5, delay: index * 0.2 + idx * 0.1 }}
+                        className="flex items-center gap-4"
                       >
-                        <CheckCircleIcon className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        <span>{benefit}</span>
+                        <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <CheckCircleIcon className="w-5 h-5 text-green-600" />
+                        </div>
+                        <span className="text-lg font-medium text-neutral-800">
+                          {benefit}
+                        </span>
                       </motion.div>
                     ))}
                   </div>
-                </GlowCard>
+                </div>
               </motion.div>
-            </ParallaxSection>
-          ))}
+            );
+          })}
         </div>
-        
-        {/* Bottom CTA */}
-        <motion.div
-          className="mt-16 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          <motion.div
-            className="inline-flex items-center gap-4 px-6 py-4 glass-card rounded-xl"
-            whileHover={{ scale: 1.05, y: -5 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <span className="text-2xl">🚀</span>
-            <div className="text-left">
-              <div className="font-bold text-primary-700">Ready to transform your payments?</div>
-              <div className="text-sm text-neutral-600">Join millions who&apos;ve already made the switch</div>
-            </div>
-          </motion.div>
-        </motion.div>
-      </div>
-      
-      {/* Floating particles */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className={`absolute rounded-full`}
-            style={{
-              width: Math.random() * 4 + 2 + 'px',
-              height: Math.random() * 4 + 2 + 'px',
-              background: i % 2 === 0
-                ? `rgba(33, 150, 243, ${Math.random() * 0.2 + 0.1})`
-                : `rgba(255, 203, 5, ${Math.random() * 0.2 + 0.1})`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -Math.random() * 100 - 50],
-              x: [(Math.random() - 0.5) * 40, (Math.random() - 0.5) * 80],
-              opacity: [0.5, 0],
-            }}
-            transition={{
-              duration: Math.random() * 5 + 10,
-              repeat: Infinity,
-              ease: "linear",
-              delay: Math.random() * 5,
-            }}
-          />
-        ))}
+
+
+
       </div>
     </section>
   );
