@@ -11,6 +11,7 @@ import {
   DevicePhoneMobileIcon,
 } from "@heroicons/react/24/outline";
 import MagneticButton from "../utils/MagneticButton";
+import Link from "next/link";
 
 export default function CTASection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -144,32 +145,32 @@ export default function CTASection() {
             with Walle Wallet&apos;s cutting-edge NFC crypto cards.
           </motion.p>
 
-          {/* CTA Buttons */}
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.7 }}
-          >
+          <Link href="/shop">
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.7 }}
             >
-              <MagneticButton variant="secondary" size="lg">
-                <span>Get Your Card Now</span>
-                <ArrowRightIcon className="w-5 h-5 ml-2" />
-              </MagneticButton>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <MagneticButton variant="secondary" size="lg">
+                  <span>Get Your Card Now</span>
+                  <ArrowRightIcon className="w-5 h-5 ml-2" />
+                </MagneticButton>
+              </motion.div>
+
+              <motion.button
+                className="px-8 py-3 bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-xl font-semibold hover:bg-white/20 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Watch Demo
+              </motion.button>
             </motion.div>
-
-            <motion.button
-              className="px-8 py-3 bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-xl font-semibold hover:bg-white/20 transition-all duration-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Watch Demo
-            </motion.button>
-          </motion.div>
-
+          </Link>
           {/* Mobile App Download - Compact */}
           <motion.div
             className="mb-16"

@@ -818,3 +818,65 @@ main > section {
   background-color: #dbeafe; /* primary-100 */
   color: #1e3a8a; /* primary-900 */
 }
+
+/* Shop specific styles */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Payment form animations */
+.payment-form-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.payment-form-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Custom scrollbar for order summary */
+.order-summary {
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb #f9fafb;
+}
+
+.order-summary::-webkit-scrollbar {
+  width: 6px;
+}
+
+.order-summary::-webkit-scrollbar-track {
+  background: #f9fafb;
+  border-radius: 3px;
+}
+
+.order-summary::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 3px;
+}
+
+.order-summary::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
+
+/* Shimmer loading effect */
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}

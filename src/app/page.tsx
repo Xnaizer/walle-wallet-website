@@ -1,4 +1,4 @@
-// page.tsx
+
 import React, { Suspense } from "react";
 import dynamic from "next/dynamic";
 import ScrollProgress from "./components/utils/ScrollProgress";
@@ -7,20 +7,29 @@ import HeroSection from "./components/Landing/HeroSection";
 import ProblemSection from "./components/Landing/ProblemSection";
 import SolutionSection from "./components/Landing/SolutionSection";
 
-const HowItWorksSection = dynamic(() => import("./components/Landing/HowItWorksSection"), {
-  loading: () => <SectionLoader />
-});
-const FeaturesSection = dynamic(() => import("./components/Landing/FeaturesSection"), {
-  loading: () => <SectionLoader />
-});
-const RoadmapSection = dynamic(() => import("./components/Landing/RoadmapSection"), {
-  loading: () => <SectionLoader />
-});
+const HowItWorksSection = dynamic(
+  () => import("./components/Landing/HowItWorksSection"),
+  {
+    loading: () => <SectionLoader />,
+  }
+);
+const FeaturesSection = dynamic(
+  () => import("./components/Landing/FeaturesSection"),
+  {
+    loading: () => <SectionLoader />,
+  }
+);
+const RoadmapSection = dynamic(
+  () => import("./components/Landing/RoadmapSection"),
+  {
+    loading: () => <SectionLoader />,
+  }
+);
 const CTASection = dynamic(() => import("./components/Landing/CTASection"), {
-  loading: () => <SectionLoader />
+  loading: () => <SectionLoader />,
 });
 const Footer = dynamic(() => import("./components/Footer"), {
-  loading: () => <SectionLoader />
+  loading: () => <SectionLoader />,
 });
 
 const SectionLoader = () => (
@@ -41,11 +50,15 @@ interface SectionWrapperProps {
   className?: string;
 }
 
-const SectionWrapper: React.FC<SectionWrapperProps> = ({ id, children, className = "" }) => (
-  <section 
-    id={id} 
+const SectionWrapper: React.FC<SectionWrapperProps> = ({
+  id,
+  children,
+  className = "",
+}) => (
+  <section
+    id={id}
     className={`scroll-mt-24 ${className}`}
-    style={{ scrollMarginTop: '6rem' }} // Account for navbar height
+    style={{ scrollMarginTop: "6rem" }} // Account for navbar height
   >
     {children}
   </section>
@@ -56,48 +69,48 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       {/* Global UI Components */}
       <ScrollProgress />
-      
+
       {/* Navigation */}
       <Navbar />
-      
+
       {/* Main Content */}
       <main className="relative z-10">
         {/* Hero Section */}
         <SectionWrapper id="hero">
           <HeroSection />
         </SectionWrapper>
-        
+
         {/* Problem Section */}
         <SectionWrapper id="problem">
           <ProblemSection />
         </SectionWrapper>
-        
+
         {/* Solution Section */}
         <SectionWrapper id="solution">
           <SolutionSection />
         </SectionWrapper>
-        
+
         {/* How It Works Section */}
         <SectionWrapper id="how-it-works">
           <Suspense fallback={<SectionLoader />}>
             <HowItWorksSection />
           </Suspense>
         </SectionWrapper>
-        
+
         {/* Features Section */}
         <SectionWrapper id="features">
           <Suspense fallback={<SectionLoader />}>
             <FeaturesSection />
           </Suspense>
         </SectionWrapper>
-        
+
         {/* Roadmap Section */}
         <SectionWrapper id="roadmap">
           <Suspense fallback={<SectionLoader />}>
             <RoadmapSection />
           </Suspense>
         </SectionWrapper>
-        
+
         {/* CTA Section */}
         <SectionWrapper id="cta">
           <Suspense fallback={<SectionLoader />}>
@@ -105,7 +118,7 @@ export default function Home() {
           </Suspense>
         </SectionWrapper>
       </main>
-      
+
       {/* Footer */}
       <SectionWrapper id="footer">
         <Suspense fallback={<SectionLoader />}>

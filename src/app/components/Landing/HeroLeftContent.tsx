@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import React from "react";
 import { motion, Variants } from "framer-motion";
 import { ArrowRightIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
 import MagneticButton from "../utils/MagneticButton";
+import Link from "next/link"; 
 
 interface HeroLeftContentProps {
   itemVariants: Variants;
@@ -27,6 +28,8 @@ const heroStats = [
 ];
 
 export default function HeroLeftContent({ itemVariants }: HeroLeftContentProps) {
+
+
   return (
     <motion.div
       variants={itemVariants}
@@ -75,7 +78,6 @@ export default function HeroLeftContent({ itemVariants }: HeroLeftContentProps) 
         <p className="text-lg lg:text-xl text-neutral-600 leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-4">
           The revolutionary DApp bridging cryptocurrency and everyday payments through NFC-enabled cards with enterprise-grade security.
         </p>
-        
       </motion.div>
 
       {/* Action Buttons */}
@@ -83,17 +85,25 @@ export default function HeroLeftContent({ itemVariants }: HeroLeftContentProps) 
         variants={itemVariants}
         className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12"
       >
-        <MagneticButton 
-          variant="primary" 
-          className="group bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2"
-        >
-          <span>Get Your Card</span>
-          <ArrowRightIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-        </MagneticButton>
+        {/* Option 1: Using Link with MagneticButton */}
+        <Link href="/shop">
+          <MagneticButton 
+            variant="primary" 
+            className="group bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2"
+          >
+            <span>Get Your Card</span>
+            <ArrowRightIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </MagneticButton>
+        </Link>
 
+        {/* Option 2: Using onClick with router.push */}
         <MagneticButton 
           variant="outline" 
           className="group border-2 border-neutral-200 hover:border-primary-300 text-neutral-700 hover:text-primary-700 px-8 py-4 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 hover:bg-primary-50"
+          onClick={() => {
+            // Demo video action - you can add modal or redirect
+            console.log("Opening demo video...");
+          }}
         >
           <PlayCircleIcon className="w-5 h-5" />
           <span>Watch Demo</span>

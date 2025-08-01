@@ -3,11 +3,12 @@
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { 
-  CreditCardIcon,
   MapPinIcon,
   EnvelopeIcon,
   PhoneIcon
 } from "@heroicons/react/24/outline";
+import Image from "next/image";
+import WalleLogo from "../../../public/walle_logo.png"
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
@@ -79,13 +80,23 @@ export default function Footer() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            {/* Logo */}
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-                <CreditCardIcon className="w-7 h-7 text-white" />
-              </div>
-              <span className="text-3xl font-black text-neutral-800">Walle Wallet</span>
-            </div>
+                {/* Mobile Logo */}
+                <motion.div 
+                  className="flex justify-start mb-2 pb-2 "
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <div className="flex items-center gap-3">
+                    <Image 
+                      src={WalleLogo} 
+                      alt="Walle Wallet Logo" 
+                      width={120}
+                      height={30}
+                      className="h-14 w-auto object-contain"
+                    />
+                  </div>
+                </motion.div>
 
             <p className="text-neutral-600 mb-8 text-md leading-relaxed">
               Your everyday payment card and crypto wallet. Tap. Pay. Done. 
