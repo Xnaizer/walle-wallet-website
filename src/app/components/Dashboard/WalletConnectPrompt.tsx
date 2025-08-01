@@ -9,8 +9,9 @@ import WalleLogo from "../../../../public/walle_logo.png";
 export default function WalletConnectPrompt() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="max-w-md w-full text-center space-y-8">
-        
+      <div className="max-w-xl w-full text-center space-y-8">
+        <h1 className="mb-4 text-5xl">Welcome To Walle Dashboard</h1>
+        <p className="mb-32 text-lg text-slate-600">&quot;Your Everyday Payment Card & Wallet&quot;</p>
         {/* Illustration Area */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -121,7 +122,7 @@ export default function WalletConnectPrompt() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="space-y-6"
+          className="space-y-6 mb-32"
         >
           <div>
             <h3 className="text-3xl font-bold block bg-gradient-to-r from-primary-600 via-primary-700 to-blue-800 bg-clip-text text-transparent mb-3">
@@ -136,7 +137,7 @@ export default function WalletConnectPrompt() {
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
             <p className="text-amber-800 font-medium mb-2">⏳ Waiting for connection...</p>
             <p className="text-amber-700 text-sm leading-relaxed">
-              Look for the "Connect Wallet" button above
+              Look for the &quot;Connect Wallet&quot; button above
             </p>
           </div>
         </motion.div>
