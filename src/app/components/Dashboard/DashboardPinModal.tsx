@@ -343,7 +343,9 @@ export default function DashboardPinModal({ onClose }: DashboardPinModalProps) {
                   transition={{ delay: 0.6 + index * 0.1 }}
                 >
                   <input
-                    ref={(el) => inputRefs.current[index] = el}
+                    ref={(el) => {
+                      inputRefs.current[index] = el;
+                    }}
                     id={`dashboard-pin-input-${index}`}
                     type={showPin ? "text" : "password"}
                     value={digit}

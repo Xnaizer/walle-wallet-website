@@ -234,7 +234,9 @@ export default function PinModal() {
                   transition={{ delay: 0.6 + index * 0.1 }}
                 >
                   <input
-                    ref={(el) => inputRefs.current[index] = el}
+                    ref={(el) => {
+                      inputRefs.current[index] = el;
+                    }}
                     id={`pin-input-${index}`}
                     type={showPin ? "text" : "password"}
                     value={digit}
