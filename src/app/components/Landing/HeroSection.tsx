@@ -100,7 +100,7 @@ export default function HeroSection() {
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 400 }}
             >
-              <CheckCircleIcon className="w-16 h-16 text-blue-500 mx-auto mb-4" />
+              <CheckCircleIcon className="w-16 h-16 text-green-500 mx-auto mb-4" />
             </motion.div>
             <h2 className="text-2xl font-bold text-neutral-900 mb-2">Walle World!</h2>
             <p className="text-neutral-600 mb-4">Your Everyday Payment Card and Wallet</p>

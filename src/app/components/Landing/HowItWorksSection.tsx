@@ -1,309 +1,192 @@
 // HowItWorksSection.tsx
 "use client";
 import React, { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import GlowCard from "../utils/GlowCard";
-import ParallaxSection from "../utils/ParallaxSection";
+import { motion, useInView } from "framer-motion";
 
 interface Step {
   step: number;
   title: string;
   description: string;
   icon: string;
-  color: string;
-  features: string[];
+  duration: string;
 }
 
 export default function HowItWorksSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: false, margin: "-10%" });
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  
-  // Parallax effects
-  const pathProgress = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  
+  const isInView = useInView(sectionRef, { once: true, margin: "-20%" });
+
   const steps: Step[] = [
     {
       step: 1,
-      title: "Buy NFC Card",
-      description: "Purchase your premium NFC card from our marketplace with multiple design options.",
-      icon: "🛒",
-      color: "bg-gradient-to-br from-blue-500 to-cyan-500",
-      features: ["Premium materials", "Free shipping", "Multiple designs"]
+      title: "Order Your Card",
+      description: "Choose from premium card designs and get free worldwide shipping to your address.",
+      icon: "💳",
+      duration: "2-3 days"
     },
     {
       step: 2,
-      title: "Connect Card",
-      description: "Link your card to the app through our secure web interface in seconds.",
-      icon: "🔗",
-      color: "bg-gradient-to-br from-purple-500 to-pink-500",
-      features: ["QR code activation", "Instant pairing", "Secure connection"]
+      title: "Activate Instantly",
+      description: "Scan the QR code with our mobile app and complete your profile setup in seconds.",
+      icon: "📱",
+      duration: "30 seconds"
     },
     {
       step: 3,
-      title: "Set Allowance",
-      description: "Configure spending limits and card settings with precision and ease.",
-      icon: "⚙️",
-      color: "bg-gradient-to-br from-green-500 to-emerald-500",
-      features: ["Flexible limits", "Category controls", "Real-time updates"]
+      title: "Load Your Balance",
+      description: "Add funds using crypto, bank transfer, or credit card with real-time conversion.",
+      icon: "💰",
+      duration: "Instant"
     },
     {
       step: 4,
-      title: "Add Funds",
-      description: "Convert fiat to crypto seamlessly within the app at best market rates.",
-      icon: "💱",
-      color: "bg-gradient-to-br from-yellow-500 to-orange-500",
-      features: ["Best rates", "Instant conversion", "Multiple currencies"]
-    },
-    {
-      step: 5,
-      title: "Pay Anywhere",
-      description: "Use your card with merchants worldwide without any barriers or fees.",
-      icon: "🌐",
-      color: "bg-gradient-to-br from-indigo-500 to-purple-500",
-      features: ["Global acceptance", "No FX fees", "Instant settlement"]
+      title: "Start Spending",
+      description: "Use your card at millions of merchants worldwide with contactless payments.",
+      icon: "🛍️",
+      duration: "Immediate"
     },
   ];
 
   return (
-    <section ref={sectionRef} id="how-it-works" className="section-padding relative overflow-hidden bg-gradient-to-b from-white via-secondary-50/20 to-white">
-      {/* Moving Background */}
-      <motion.div 
-        className="absolute inset-0 pointer-events-none z-[-1]"
-        style={{ y: backgroundY }}
-      >
-        <div className="absolute top-1/4 right-1/4 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-secondary-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/4 w-[30vw] h-[30vw] max-w-[400px] max-h-[400px] bg-primary-500/5 rounded-full blur-3xl" />
-      </motion.div>
-
-      <div className="container-custom relative z-10">
-        {/* Header */}
-        <motion.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
-        >
+    <section ref={sectionRef} className="py-24 lg:py-32 bg-white">
+      <div className="container mx-auto max-w-7xl px-6">
+        
+        {/* Clean Header */}
+        <div className="text-center mb-16">
           <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-secondary-100 to-primary-100 text-primary-700 rounded-full font-medium mb-6 border border-primary-200"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
           >
-            <span className="text-xl">🚀</span>
-            <span>Simple 5-Step Process</span>
+
+            
+            <h2 className="text-5xl lg:text-6xl font-black text-blue-900 mb-6 leading-tight">
+              Get Started in 4 Steps
+            </h2>
+            
+            <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
+              From ordering to spending, we&apos;ve made the process as simple as possible
+            </p>
           </motion.div>
+        </div>
 
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            How{" "}
-            <span className="gradient-text">It Works</span>
-          </h2>
-          
-          <motion.p
-            className="text-xl text-neutral-700 max-w-3xl mx-auto leading-relaxed"
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Get started with Walle Wallet in just{" "}
-            <span className="font-semibold text-secondary-700">5 simple steps</span>.
-            No technical knowledge required – we&apos;ve made crypto payments as easy as using a debit card.
-          </motion.p>
-        </motion.div>
-
-        {/* Steps with Connection Path */}
-        <div className="relative max-w-6xl mx-auto">
-
-          {/* Connection Path - Desktop Only */}
-          <div className="hidden lg:block absolute top-24 left-0 w-full h-1 z-0">
-            <svg className="w-full h-full" viewBox="0 0 1200 8" preserveAspectRatio="none">
-              {/* Background path */}
-              <path
-                d="M0,4 C300,25 600,-15 900,20 T1200,4"
-                stroke="rgba(33, 150, 243, 0.2)"
-                strokeWidth="8"
-                fill="none"
-                strokeLinecap="round"
-              />
-              
-              {/* Animated path that grows as you scroll */}
-              <motion.path
-                d="M0,4 C300,25 600,-15 900,20 T1200,4"
-                stroke="url(#howItWorksGradient)"
-                strokeWidth="8"
-                fill="none"
-                strokeLinecap="round"
-                style={{ pathLength: pathProgress }}
-                strokeDasharray={1}
-                strokeDashoffset={0}
-              />
-              
-              <defs>
-                <linearGradient id="howItWorksGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#2196f3" />
-                  <stop offset="50%" stopColor="#64b5f6" />
-                  <stop offset="100%" stopColor="#ffcb05" />
-                </linearGradient>
-              </defs>
-            </svg>
-
-            {/* Animated Progress Dot */}
-            <motion.div
-              className="absolute top-1/2 w-6 h-6 bg-white rounded-full shadow-lg transform -translate-y-1/2 border-2 border-primary-500 z-20 flex items-center justify-center"
-              style={{ left: useTransform(pathProgress, [0, 1], ['0%', 'calc(100% - 24px)']) }}
-            >
-              <motion.div 
-                className="w-2 h-2 bg-primary-600 rounded-full"
-                animate={{ scale: [1, 1.5, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              />
-            </motion.div>
-          </div>
-
-          {/* Steps Grid */}
-          <div className="grid lg:grid-cols-5 gap-6 lg:gap-8 relative z-10">
+        {/* Steps Cards - Clean Grid */}
+        <div className="max-w-6xl mx-auto mb-16">
+          <div className="grid lg:grid-cols-4 gap-6">
             {steps.map((step, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ 
-                  duration: 0.7, 
-                  delay: 0.3 + index * 0.1,
-                  ease: [0.25, 1, 0.5, 1]
-                }}
-                className="flex flex-col"
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="group"
               >
-                {/* Step Number */}
-                <motion.div
-                  className="relative z-20 mx-auto mb-6"
-                  whileHover={{ scale: 1.1, y: -5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <motion.div
-                    className={`w-16 h-16 ${step.color} rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg mx-auto`}
-                    animate={{ 
-                      boxShadow: [
-                        "0 5px 15px rgba(0,0,0,0.1)",
-                        "0 15px 30px rgba(0,0,0,0.2)",
-                        "0 5px 15px rgba(0,0,0,0.1)",
-                      ]
-                    }}
-                    transition={{ 
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: index * 0.3
-                    }}
-                  >
-                    {step.step}
-                  </motion.div>
-                  
-                  {/* Subtle glow */}
-                  <motion.div
-                    className={`absolute inset-0 ${step.color} rounded-full blur-lg opacity-30`}
-                    animate={{
-                      scale: [1, 1.3, 1],
-                      opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: index * 0.3,
-                    }}
-                  />
-                </motion.div>
-
-                {/* Step Content Card */}
-                <GlowCard className="flex-1 p-5 text-center" gradient={index % 2 === 0 ? "primary" : "secondary"}>
-                  {/* Step Icon */}
-                  <motion.div
-                    className="text-4xl mb-4"
-                    whileHover={{ scale: 1.2, rotate: 10 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    {step.icon}
-                  </motion.div>
-
-                  {/* Step Title */}
-                  <h3 className="text-lg font-bold text-neutral-800 mb-3">
-                    {step.title}
-                  </h3>
-
-                  {/* Step Description */}
-                  <p className="text-neutral-600 text-sm mb-4">
-                    {step.description}
-                  </p>
-
-                  {/* Step Features */}
-                  <div className="space-y-2 text-xs text-neutral-500">
-                    {step.features.map((feature, featureIndex) => (
-                      <motion.div
-                        key={featureIndex}
-                        className="flex items-center justify-center gap-1.5"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ 
-                          duration: 0.5, 
-                          delay: 0.5 + index * 0.1 + featureIndex * 0.05
-                        }}
-                      >
-                        <div className={`w-1.5 h-1.5 ${step.color} rounded-full`} />
-                        <span>{feature}</span>
-                      </motion.div>
-                    ))}
+                <div className="bg-white border-2 border-neutral-100 rounded-2xl p-8 h-full hover:border-blue-200 hover:shadow-lg transition-all duration-300">
+                  {/* Step Header */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-900 text-white rounded-xl flex items-center justify-center font-black text-lg">
+                      {step.step}
+                    </div>
+                    <div className="text-3xl">{step.icon}</div>
                   </div>
-                </GlowCard>
+                  
+                  {/* Content */}
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-bold bg-gradient-to-l from-primary-600 via-primary-700 to-blue-800 bg-clip-text text-transparent">
+                      {step.title}
+                    </h3>
+                    
+                    <div className="inline-block px-3 py-1 bg-neutral-100 text-neutral-600 rounded-full text-xs font-semibold">
+                      ⏱️ {step.duration}
+                    </div>
+                    
+                    <p className="text-neutral-600 leading-relaxed">
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
 
-        {/* Process Stats */}
+        {/* Process Flow - Clean Timeline */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 max-w-4xl mx-auto"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.8 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="max-w-4xl mx-auto mb-16"
         >
-          {[
-            { value: "< 5 min", label: "Setup Time", icon: "⚡" },
-            { value: "24/7", label: "Support", icon: "🛟" },
-            { value: "99.9%", label: "Success Rate", icon: "✅" },
-            { value: "Free", label: "Setup Cost", icon: "💰" },
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              className="glass-card p-4 text-center"
-              whileHover={{ scale: 1.05, y: -5 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <motion.div
-                className="text-2xl mb-2 mx-auto"
-                animate={{ 
-                  y: [0, -5, 0],
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity, 
-                  delay: index * 0.3 
-                }}
-              >
-                {stat.icon}
-              </motion.div>
-              <div className="text-lg font-bold text-primary-700">
-                {stat.value}
-              </div>
-              <div className="text-xs text-neutral-600 font-medium">
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
+          <div className="bg-neutral-50 rounded-2xl p-8">
+            <h3 className="text-2xl font-bold text-blue-900 text-center mb-8">
+              Your Journey Timeline
+            </h3>
+            
+            <div className="flex items-center justify-center gap-4">
+              {['💳', '⚡', '💰', '🎉'].map((emoji, index) => (
+                <React.Fragment key={index}>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={isInView ? { scale: 1 } : {}}
+                    transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
+                    className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-2xl shadow-sm border-2 border-neutral-200"
+                  >
+                    {emoji}
+                  </motion.div>
+                  
+                  {index < 3 && (
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      animate={isInView ? { scaleX: 1 } : {}}
+                      transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
+                      className="w-12 h-1 bg-blue-200 rounded origin-left"
+                    />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+            
+            <div className="grid grid-cols-4 gap-4 mt-6 text-center">
+              <div className="text-sm text-neutral-600">Order</div>
+              <div className="text-sm text-neutral-600">Setup</div>
+              <div className="text-sm text-neutral-600">Fund</div>
+              <div className="text-sm text-neutral-600">Spend</div>
+            </div>
+          </div>
         </motion.div>
+
+        {/* Clean Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="text-center"
+        >
+          <div className="bg-gradient-to-r from-primary-600 via-primary-700 to-blue-800 text-white rounded-2xl p-8">
+            <h3 className="text-3xl font-bold mb-8">
+              Why Choose Walle?
+            </h3>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="text-center">
+                <div className="text-3xl font-black mb-2">10min</div>
+                <div className="text-blue-200 text-sm">Total Setup</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-black mb-2">50M+</div>
+                <div className="text-blue-200 text-sm">Merchants</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-black mb-2">200+</div>
+                <div className="text-blue-200 text-sm">Countries</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-black mb-2">24/7</div>
+                <div className="text-blue-200 text-sm">Support</div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
     </section>
   );
