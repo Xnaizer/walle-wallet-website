@@ -3,78 +3,120 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { WalletCard } from "./DashboardContext";
-import { CreditCardIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { 
+  EyeIcon, 
+  EyeSlashIcon,
+} from "@heroicons/react/24/outline";
 
 interface WalleCardProps {
   card: WalletCard;
   showBalance?: boolean;
+  isSelected?: boolean;
+  onClick?: () => void;
 }
 
-export default function WalleCard({ card, showBalance = true }: WalleCardProps) {
-  const [isBalanceVisible, setIsBalanceVisible] = React.useState(false);
+export default function WalleCard({ 
+  card, 
+  showBalance = true, 
+  isSelected = false,
+  onClick 
+}: WalleCardProps) {
+  const [isBalanceVisible, setIsBalanceVisible] = React.useState(true);
 
-  const totalBalance = card.balance.idr + card.balance.usdt + card.balance.usdc + card.balance.idrx + card.balance.idrt;
+  // Calculate total balance in IDR equivalent
+  const totalBalance = card.balance.idr + 
+    (card.balance.usdt * 15000) + 
+    (card.balance.usdc * 15000) + 
+    card.balance.idrx + 
+    card.balance.idrt;
+
+  // Get card brand colors
+  const getCardGradient = (cardName: string) => {
+    if (cardName.toLowerCase().includes('main') || cardName.toLowerCase().includes('primary')) {
+      return 'from-blue-600 via-purple-600 to-blue-700';
+    } else if (cardName.toLowerCase().includes('saving')) {
+      return 'from-green-500 via-teal-600 to-green-700';
+    } else if (cardName.toLowerCase().includes('travel')) {
+      return 'from-orange-500 via-red-500 to-pink-600';
+    } else {
+      return 'from-indigo-600 via-purple-600 to-indigo-700';
+    }
+  };
 
   return (
     <motion.div
-      className="relative w-80 h-48 rounded-2xl overflow-hidden shadow-xl cursor-pointer"
-      whileHover={{ y: -5, rotateY: 5 }}
-      transition={{ duration: 0.3 }}
+      className={`relative w-80 h-48 rounded-2xl overflow-hidden cursor-pointer group ${
+        isSelected ? 'ring-2 ring-primary-400' : ''
+      }`}
+      whileHover={{ 
+        y: -4, 
+        scale: 1.01
+      }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ 
+        duration: 0.2,
+        ease: "easeOut"
+      }}
+      onClick={onClick}
     >
-      {/* Card Background */}
-      <div className="absolute inset-0 bg-walle-card"></div>
+      {/* Card Background with Gradient */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${getCardGradient(card.name)} shadow-xl`}></div>
       
-      {/* Card Pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-4 right-4 w-20 h-20 border border-white/30 rounded-full"></div>
-        <div className="absolute top-8 right-8 w-12 h-12 border border-white/20 rounded-full"></div>
-        <div className="absolute bottom-4 left-4 w-16 h-16 border border-white/10 rounded-full"></div>
+      {/* Simple Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute -top-6 -right-6 w-24 h-24 border border-white/30 rounded-full"></div>
+        <div className="absolute bottom-6 left-6 w-8 h-8 border border-white/20 rounded-full"></div>
       </div>
 
       {/* Card Content */}
       <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
-        {/* Header */}
+        
+        {/* Header - Minimal */}
         <div className="flex justify-between items-start">
           <div>
-            <div className="text-white/80 text-sm font-medium mb-1">Walle Card</div>
-            <div className="text-lg font-bold">{card.name}</div>
+            <div className="text-white/80 text-sm font-medium">WALLE</div>
+            <div className="text-xl font-bold text-white mt-1">
+              {card.name}
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <CreditCardIcon className="w-6 h-6 text-white/80" />
-            <div className={`w-3 h-3 rounded-full ${card.isActive ? 'bg-green-400' : 'bg-red-400'}`}></div>
-          </div>
+          
+          {/* Simple Status */}
+          <div className={`w-3 h-3 rounded-full ${
+            card.isActive ? 'bg-green-400' : 'bg-red-400'
+          }`}></div>
         </div>
 
         {/* Card Number */}
-        <div className="my-4">
-          <div className="text-xl font-mono font-bold tracking-wider">
-            {card.cardNumber}
-          </div>
-          <div className="text-white/60 text-sm mt-1">
-            Expires: {card.expiryDate}
+        <div className="flex-1 flex items-center">
+          <div>
+            <div className="text-lg font-mono font-bold text-white mb-2">
+              {card.cardNumber}
+            </div>
+            <div className="text-white/70 text-sm">
+              {card.expiryDate}
+            </div>
           </div>
         </div>
 
-        {/* Balance */}
+        {/* Balance Section */}
         {showBalance && (
           <div className="flex justify-between items-end">
             <div>
-              <div className="text-white/80 text-sm mb-1">Total Balance</div>
               <div className="flex items-center gap-2">
-                {isBalanceVisible ? (
-                  <span className="text-2xl font-bold">
-                    {totalBalance.toLocaleString('id-ID', {
-                      style: 'currency',
-                      currency: 'IDR',
-                      minimumFractionDigits: 0,
-                    })}
-                  </span>
-                ) : (
-                  <span className="text-2xl font-bold">••••••</span>
-                )}
+                <div className="text-2xl font-bold text-white">
+                  {isBalanceVisible ? (
+                    `Rp ${(totalBalance / 1000000).toFixed(1)}M`
+                  ) : (
+                    'Rp ••••••'
+                  )}
+                </div>
+                
                 <button
-                  onClick={() => setIsBalanceVisible(!isBalanceVisible)}
-                  className="text-white/60 hover:text-white transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsBalanceVisible(!isBalanceVisible);
+                  }}
+                  className="text-white/60 hover:text-white transition-colors p-1"
                 >
                   {isBalanceVisible ? (
                     <EyeSlashIcon className="w-4 h-4" />
@@ -84,24 +126,19 @@ export default function WalleCard({ card, showBalance = true }: WalleCardProps) 
                 </button>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-white/60 text-xs">ID</div>
-              <div className="text-sm font-mono">{card.id.slice(-6).toUpperCase()}</div>
+
+            {/* Simple Logo */}
+            <div className="text-white/60 text-sm font-bold">
+              WALLE
             </div>
           </div>
         )}
-
-        {/* Status Indicator */}
-        <div className="absolute top-6 right-6">
-          <div className={`px-2 py-1 rounded-full text-xs font-semibold ${
-            card.isActive 
-              ? 'bg-green-500/20 text-green-200 border border-green-400/30' 
-              : 'bg-red-500/20 text-red-200 border border-red-400/30'
-          }`}>
-            {card.isActive ? 'Active' : 'Inactive'}
-          </div>
-        </div>
       </div>
+
+      {/* Selection Ring */}
+      {isSelected && (
+        <div className="absolute inset-0 border-2 border-primary-400 rounded-2xl pointer-events-none" />
+      )}
     </motion.div>
   );
 }

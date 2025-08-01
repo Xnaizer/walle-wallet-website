@@ -7,7 +7,7 @@ import {
   GlobeAltIcon,
   CreditCardIcon,
   CheckCircleIcon,
-  SparklesIcon,
+
 } from "@heroicons/react/24/outline";
 
 interface Feature {

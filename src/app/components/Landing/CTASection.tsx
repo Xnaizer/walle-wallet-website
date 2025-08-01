@@ -7,7 +7,6 @@ import {
   BoltIcon,
   GlobeAltIcon,
   ArrowRightIcon,
-  SparklesIcon,
   DevicePhoneMobileIcon,
 } from "@heroicons/react/24/outline";
 import MagneticButton from "../utils/MagneticButton";

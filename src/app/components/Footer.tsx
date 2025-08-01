@@ -188,7 +188,7 @@ export default function Footer() {
           </div>
           
           <div className="flex items-center space-x-8 text-sm">
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((link, index) => (
+            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((link) => (
               <motion.a
                 key={link}
                 href="#"

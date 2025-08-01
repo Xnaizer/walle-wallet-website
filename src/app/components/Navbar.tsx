@@ -11,6 +11,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import MagneticButton from "./utils/MagneticButton";
 import Image from "next/image";
 import WalleLogo from "../../../public/walle_logo.png";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -171,7 +172,7 @@ export default function Navbar() {
                     </motion.button>
                   );
                 })}
-
+                <Link href="/dashboard">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 0.8 }}
@@ -181,11 +182,11 @@ export default function Navbar() {
                   <MagneticButton
                     variant="primary"
                     size="md"
-                    onClick={() => smoothScrollTo("#cta")}
                   >
                     Dashboard
                   </MagneticButton>
                 </motion.div>
+                </Link>
               </div>
 
               {/* Mobile Menu Button */}
@@ -300,13 +301,15 @@ export default function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
                   >
+                    <Link href="/dashboard">
                     <MagneticButton
                       variant="primary"
                       className="w-full justify-center py-4 text-lg font-bold"
-                      onClick={() => smoothScrollTo("#cta")}
+                      
                     >
                       Dashboard
                     </MagneticButton>
+                    </Link>
                   </motion.div>
                 </div>
               </motion.div>

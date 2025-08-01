@@ -2,7 +2,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPinIcon, UserIcon, EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline";
+import { MapPinIcon, UserIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useShop } from "./ShopContext";
 
 interface ShippingFormData {

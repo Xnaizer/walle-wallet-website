@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { DevicePhoneMobileIcon, QrCodeIcon, StarIcon } from "@heroicons/react/24/outline";
 import { AppleIcon, GooglePlayIcon } from "../Icons/StoreIcons";
-import Image from "next/image";
+// import Image from "next/image";
 
 export default function MobileAppPromo() {
   return (
