@@ -9,9 +9,18 @@ import CardSettings from "./CardSettings";
 import SetLimit from "./SetLimit";
 import TransactionLog from "./TransactionLog";
 
+// Define proper types for tab IDs
+type TabId = 'settings' | 'limits' | 'transactions';
+
+interface Tab {
+  id: TabId;
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
 export default function CardsSection() {
   const { state, dispatch } = useDashboard();
-  const [activeTab, setActiveTab] = useState<'settings' | 'limits' | 'transactions'>('settings');
+  const [activeTab, setActiveTab] = useState<TabId>('settings');
 
   const handlePrevCard = () => {
     const newIndex = state.selectedCardIndex > 0 ? state.selectedCardIndex - 1 : state.cards.length - 1;
@@ -25,11 +34,15 @@ export default function CardsSection() {
 
   const currentCard = state.cards[state.selectedCardIndex];
 
-  const tabs = [
+  const tabs: Tab[] = [
     { id: 'settings', name: 'Card Settings', icon: CreditCardIcon },
     { id: 'limits', name: 'Set Limit', icon: CreditCardIcon },
     { id: 'transactions', name: 'Transaction Log', icon: CreditCardIcon },
   ];
+
+  const handleTabClick = (tabId: TabId) => {
+    setActiveTab(tabId);
+  };
 
   if (state.cards.length === 0) {
     return (
@@ -67,7 +80,7 @@ export default function CardsSection() {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => handleTabClick(tab.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
                   activeTab === tab.id
                     ? 'bg-walle-gradient text-white shadow-lg'

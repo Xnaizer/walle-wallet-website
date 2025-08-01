@@ -1,8 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack(config) {
+  webpack(config: { 
+    module: { 
+      rules: Array<{
+        test?: { test?: (path: string) => boolean } | RegExp;
+        issuer?: unknown;
+        resourceQuery?: { not?: unknown[] } | RegExp;
+        exclude?: RegExp;
+        use?: string[];
+        [key: string]: unknown;
+      }> 
+    };
+    [key: string]: unknown;
+  }) {
     // Find the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) =>
+    const fileLoaderRule = config.module.rules.find((rule: {
+      test?: { test?: (path: string) => boolean } | RegExp;
+      issuer?: unknown;
+      resourceQuery?: { not?: unknown[] } | RegExp;
+      exclude?: RegExp;
+      use?: string[];
+      [key: string]: unknown;
+    }) =>
       rule.test?.test?.('.svg'),
     );
 
@@ -16,8 +35,8 @@ const nextConfig = {
       // Convert all other *.svg imports to React components
       {
         test: /\.svg$/i,
-        issuer: fileLoaderRule.issuer,
-        resourceQuery: { not: [...(fileLoaderRule.resourceQuery?.not || []), /url/] }, // exclude if *.svg?url
+        issuer: fileLoaderRule?.issuer,
+        resourceQuery: { not: [...(fileLoaderRule?.resourceQuery && typeof fileLoaderRule.resourceQuery === 'object' && 'not' in fileLoaderRule.resourceQuery ? fileLoaderRule.resourceQuery.not || [] : []), /url/] }, // exclude if *.svg?url
         use: ['@svgr/webpack'],
       },
     );

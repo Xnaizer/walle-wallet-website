@@ -25,32 +25,34 @@ export default function HeroRightContent({
   setShowPaymentSuccess
 }: HeroRightContentProps) {
 
-
   const handleCardDragStart = useCallback(() => {
     setIsDragging(true);
   }, [setIsDragging]);
 
-  const handleCardDrag = useCallback((event: any, info: PanInfo) => {
+  const handleCardDrag = useCallback((
+    _event: MouseEvent | TouchEvent | PointerEvent, 
+    info: PanInfo
+  ) => {
     const newX = info.offset.x;
     const newY = info.offset.y;
     const distance = Math.sqrt(Math.pow(newX + 150, 2) + Math.pow(newY, 2));
     const isNear = distance < 80;
     
     setIsCardNearTarget(isNear);
-   
     setCardPosition({ x: newX, y: newY });
   }, [setIsCardNearTarget, setCardPosition]);
 
-  const handleCardDragEnd = useCallback((event: any, info: PanInfo) => {
+  const handleCardDragEnd = useCallback((
+    _event: MouseEvent | TouchEvent | PointerEvent, 
+    info: PanInfo
+  ) => {
     setIsDragging(false);
     const newX = info.offset.x;
     const newY = info.offset.y;
     
-
     const distance = Math.sqrt(Math.pow(newX + 150, 2) + Math.pow(newY, 2));
     
     if (distance < 80) {
-     
       setShowPaymentSuccess(true);
       setCardPosition({ x: -150, y: 0 }); 
       
@@ -60,7 +62,6 @@ export default function HeroRightContent({
         setIsCardNearTarget(false);
       }, 3000);
     } else {
-      
       setCardPosition({ x: 0, y: 0 });
       setIsCardNearTarget(false);
     }
@@ -69,9 +70,9 @@ export default function HeroRightContent({
   return (
     <motion.div 
       variants={itemVariants}
-      className=" flex justify-end lg:justify-end items-center relative min-h-[500px]"
+      className="flex justify-end lg:justify-end items-center relative min-h-[500px]"
     >
- 
+      {/* Payment Target Zone */}
       <motion.div
         className={`absolute top-[180px] right-[420px] z-10 bg-white border-2 rounded-xl p-4 text-center transition-all duration-300 ${
           isCardNearTarget 
@@ -104,10 +105,10 @@ export default function HeroRightContent({
           {isCardNearTarget ? 'Release!' : 'Payment'}
         </span>
         
-   
+        {/* Pulse Ring Effect */}
         {isCardNearTarget && (
           <motion.div
-            className="absolute inset-0  border-2 border-green-400 rounded-xl"
+            className="absolute inset-0 border-2 border-green-400 rounded-xl"
             animate={{
               scale: [1, 1.2, 1],
               opacity: [0.5, 0, 0.5]
@@ -121,7 +122,7 @@ export default function HeroRightContent({
         )}
       </motion.div>
 
-      
+      {/* Background Glow Effect */}
       <motion.div
         className="absolute inset-0 bg-primary-200/20 rounded-3xl -z-10 pointer-events-none"
         animate={{
@@ -134,9 +135,9 @@ export default function HeroRightContent({
         }}
       />
 
-     
+      {/* Draggable Card */}
       <motion.div
-        className={`w-[350px]  flex  ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} z-20 relative`}
+        className={`w-[350px] flex ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} z-20 relative`}
         drag
         dragConstraints={{ left: -5000, right: 5000, top: -500, bottom: 5000 }}
         dragElastic={0.05} 
@@ -173,14 +174,11 @@ export default function HeroRightContent({
             damping: 50
           }
         }}
-      
         layout
         layoutId="draggable-card"
       >
         <CardDisplay />
       </motion.div>
-      
-
     </motion.div>
   );
 }

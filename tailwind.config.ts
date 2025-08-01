@@ -1,8 +1,9 @@
 // tailwind.config.ts
 import type { Config } from 'tailwindcss'
+import plugin from 'tailwindcss/plugin'
 
 const config: Config = {
-  darkMode: "class", // Perbaiki tipe ini
+  darkMode: "class",
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -19,8 +20,6 @@ const config: Config = {
     },
     extend: {
       colors: {
-
-
         walle: {
           // Primary palette
           'dark-blue': '#11296b',
@@ -416,7 +415,7 @@ const config: Config = {
     },
   },
   plugins: [
-    function({ addUtilities, addComponents }: { addUtilities: any; addComponents: any }) {
+    plugin(function({ addUtilities, addComponents }) {
       const newUtilities = {
         '.perspective-1000': { perspective: '1000px' },
         '.preserve-3d': { 'transform-style': 'preserve-3d' },
@@ -460,7 +459,7 @@ const config: Config = {
 
       addUtilities(newUtilities)
       addComponents(newComponents)
-    },
+    }),
   ],
 }
 
