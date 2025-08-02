@@ -6,7 +6,8 @@ import {
   ClockIcon, 
   XMarkIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  ArrowRightIcon
 } from "@heroicons/react/24/outline";
 import { useDashboard } from "./DashboardContext";
 import TransactionTable from "./TransactionTable";
@@ -75,14 +76,15 @@ export default function TransactionHistory() {
             Transaction History
           </h2>
           
-          {state.transactions.length > 0 && (
-            <button 
-              onClick={handleViewAll}
-              className="text-walle-royal-blue cursor-pointer hover:text-walle-dark-blue transition-colors font-medium"
-            >
-              View All
-            </button>
-          )}
+            {state.transactions.length > 0 && (
+              <button 
+                onClick={handleViewAll}
+                className="flex items-center justify-center gap-3 text-walle-royal-blue cursor-pointer hover:text-walle-dark-blue transition-colors font-medium group"
+              >
+                View All 
+                <ArrowRightIcon className="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            )}
         </div>
 
         {state.transactions.length === 0 ? (
@@ -151,7 +153,7 @@ export default function TransactionHistory() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50 p-4"
             onClick={handleModalClose}
           >
             <motion.div
@@ -169,9 +171,9 @@ export default function TransactionHistory() {
                 </h3>
                 <button
                   onClick={handleModalClose}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
                 >
-                  <XMarkIcon className="w-6 h-6 text-gray-500" />
+                  <XMarkIcon className="w-6 h-6 text-gray-500 " />
                 </button>
               </div>
 
