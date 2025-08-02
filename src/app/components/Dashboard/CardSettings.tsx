@@ -65,7 +65,7 @@ export default function CardSettings({ card }: CardSettingsProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <motion.button
             onClick={() => setShowCardInfoModal(true)}
-            className="group p-4 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl transition-all duration-300 border border-blue-200/50"
+            className="group p-4 bg-slate-200 rounded-xl transition-all duration-300 border border-blue-200/50"
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -82,7 +82,7 @@ export default function CardSettings({ card }: CardSettingsProps) {
 
           <motion.button
             onClick={() => setShowChangePinModal(true)}
-            className="group p-4 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-xl transition-all duration-300 border border-green-200/50"
+            className="group p-4 bg-slate-200 rounded-xl transition-all duration-300 border border-green-200/50"
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
           >
