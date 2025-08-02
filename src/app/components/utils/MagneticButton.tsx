@@ -83,7 +83,7 @@ export default function MagneticButton({
     <motion.button
       ref={ref}
       style={{ x, y, scale }}
-      className={`${variants[variant]} ${sizes[size]} rounded-full font-medium relative overflow-hidden ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
+      className={`${variants[variant]} ${sizes[size]} rounded-md font-medium relative overflow-hidden ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseDown={handleMouseDown}

@@ -10,6 +10,7 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import WalleLogo from "../../../public/walle_logo.png";
+import Link from "next/link";
 
 export default function NavbarMock() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -111,6 +112,7 @@ export default function NavbarMock() {
           >
             <div className="flex items-center justify-between">
               {/* Logo */}
+              <Link href="/">
               <motion.button
                 className="flex items-center gap-4 focus:outline-none cursor-pointer"
                 whileHover={{ scale: 1.02 }}
@@ -131,7 +133,7 @@ export default function NavbarMock() {
                   />
                 </motion.div>
               </motion.button>
-
+              </Link>
             <div>
                 <h1>You&apos;re Everyday Payment Card And Wallet</h1>
             </div>

@@ -32,8 +32,9 @@ export interface Transaction {
   amount: number;
   category: string;
   recipient: string;
-  status: 'completed' | 'pending' | 'failed';
+  status: 'done' | 'pending' | 'failed';
   cardId: string;
+  cardAddress? : string;
   type: 'received' | 'spending';
 }
 
@@ -124,45 +125,150 @@ const generateMockCards = (): WalletCard[] => [
   }
 ];
 
+// Fungsi untuk format tanggal dengan region
+const formatDateWithRegion = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('id-ID', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'Asia/Jakarta'
+  });
+};
+
 const generateMockTransactions = (): Transaction[] => [
   {
     id: 'tx-1',
-    date: '2024-01-15',
-    time: '14:30',
+    date: formatDateWithRegion('2024-08-01'),
+    time: '14:30 WIB',
     coinType: 'usdt',
     amount: 25.50,
     category: 'Food & Beverage',
     recipient: 'Starbucks Indonesia',
-    status: 'completed',
+    status: 'done',
     cardId: 'card-1',
+    cardAddress: '543246137864',
     type: 'spending'
   },
   {
     id: 'tx-2',
-    date: '2024-01-14',
-    time: '09:15',
+    date: formatDateWithRegion('2024-08-01'),
+    time: '09:15 WIB',
     coinType: 'usdc',
     amount: 100.00,
     category: 'Transfer',
     recipient: 'John Doe',
-    status: 'completed',
+    status: 'done',
     cardId: 'card-1',
+    cardAddress: '9877564123298',
     type: 'received'
   },
   {
     id: 'tx-3',
-    date: '2024-01-14',
-    time: '16:45',
+    date: formatDateWithRegion('2024-08-01'),
+    time: '16:45 WIB',
     coinType: 'idrx',
     amount: 75000,
     category: 'Transportation',
     recipient: 'Gojek',
-    status: 'completed',
+    status: 'pending', // Transaksi sedang diproses
     cardId: 'card-2',
+    cardAddress: '12398675641298',
+    type: 'spending'
+  },
+  {
+    id: 'tx-4',
+    date: formatDateWithRegion('2024-07-31'),
+    time: '12:22 WIB',
+    coinType: 'usdt',
+    amount: 50.25,
+    category: 'Shopping',
+    recipient: 'Tokopedia',
+    status: 'failed', // Transaksi gagal
+    cardId: 'card-1',
+    cardAddress: '543246137864',
+    type: 'spending'
+  },
+  {
+    id: 'tx-5',
+    date: formatDateWithRegion('2024-07-31'),
+    time: '08:30 WIB',
+    coinType: 'idrt',
+    amount: 150000,
+    category: 'Utilities',
+    recipient: 'PLN Indonesia',
+    status: 'done',
+    cardId: 'card-2',
+    cardAddress: '12398675641298',
+    type: 'spending'
+  },
+  {
+    id: 'tx-6',
+    date: formatDateWithRegion('2024-07-30'),
+    time: '19:45 WITA',
+    coinType: 'usdc',
+    amount: 75.00,
+    category: 'Entertainment',
+    recipient: 'Netflix Indonesia',
+    status: 'pending',
+    cardId: 'card-1',
+    cardAddress: '543246137864',
+    type: 'spending'
+  },
+  {
+    id: 'tx-7',
+    date: formatDateWithRegion('2024-07-30'),
+    time: '15:12 WIB',
+    coinType: 'idrx',
+    amount: 200000,
+    category: 'Healthcare',
+    recipient: 'RS Siloam',
+    status: 'done',
+    cardId: 'card-2',
+    cardAddress: '12398675641298',
+    type: 'spending'
+  },
+  {
+    id: 'tx-8',
+    date: formatDateWithRegion('2024-07-29'),
+    time: '11:00 WIB',
+    coinType: 'usdt',
+    amount: 500.00,
+    category: 'Salary',
+    recipient: 'PT Tech Company',
+    status: 'done',
+    cardId: 'card-1',
+    cardAddress: '9877564123298',
+    type: 'received'
+  },
+  {
+    id: 'tx-9',
+    date: formatDateWithRegion('2024-07-29'),
+    time: '13:20 WIB',
+    coinType: 'usdc',
+    amount: 35.75,
+    category: 'Food & Beverage',
+    recipient: 'KFC Indonesia',
+    status: 'failed',
+    cardId: 'card-1',
+    cardAddress: '543246137864',
+    type: 'spending'
+  },
+  {
+    id: 'tx-10',
+    date: formatDateWithRegion('2024-07-28'),
+    time: '21:30 WIT',
+    coinType: 'idrt',
+    amount: 120000,
+    category: 'Education',
+    recipient: 'Coursera',
+    status: 'pending',
+    cardId: 'card-2',
+    cardAddress: '12398675641298',
     type: 'spending'
   }
 ];
-
 const initialState: DashboardState = {
   isWalletConnected: false,
   walletAddress: '',
