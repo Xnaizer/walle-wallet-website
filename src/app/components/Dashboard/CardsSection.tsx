@@ -11,7 +11,12 @@ import {
   ClockIcon,
   EyeIcon,
   EyeSlashIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  CalendarIcon,
+  ChartBarIcon,
+  Cog6ToothIcon,
+  ExclamationTriangleIcon
+
 } from "@heroicons/react/24/outline";
 import { useDashboard } from "./DashboardContext";
 import WalleCard from "./WalleCard";
@@ -126,7 +131,7 @@ export default function CardsSection() {
         className="xl:col-span-2 space-y-6"
       >
         {/* Card Display Section */}
-        <div className="bg-white rounded-3xl p-8 shadow-lg border border-walle-pale-cyan">
+        <div className="bg-white rounded-3xl p-8 ">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-walle-dark-blue">
@@ -192,95 +197,153 @@ export default function CardsSection() {
         </div>
 
         {/* Card Information */}
-        <div className="bg-white rounded-3xl p-8 shadow-lg border border-walle-pale-cyan">
+        <div className="bg-white rounded-2xl px-6 ">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-walle-dark-blue">Card Information</h3>
+            <div className="flex items-center gap-3">
+              <h3 className="text-xl font-bold text-slate-800">Card Information</h3>
+            </div>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowBalance(!showBalance)}
-              className="p-2 rounded-lg bg-walle-soft text-walle-royal-blue hover:bg-walle-ice-blue transition-colors"
+              className="p-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
             >
               {showBalance ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
             </motion.button>
           </div>
 
-          {/* Total Balance */}
-          <div className="bg-gradient-to-r from-walle-royal-blue to-walle-ocean-blue rounded-2xl p-6 mb-6 text-white">
-            <div className="flex items-center gap-3 mb-2">
-              <BanknotesIcon className="w-6 h-6" />
-              <span className="text-sm opacity-90">Total Balance</span>
-            </div>
-            <div className="text-3xl font-bold">
-              {showBalance ? `Rp ${getTotalBalance().toLocaleString()}` : 'Rp ****'}
+          {/* Total Balance - Compact */}
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-5 mb-6 text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -translate-y-16 translate-x-16"></div>
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-2">
+                <BanknotesIcon className="w-5 h-5 opacity-90" />
+                <span className="text-sm opacity-90 font-medium">Total Balance</span>
+              </div>
+              <div className="text-2xl font-bold mb-1">
+                {showBalance ? `Rp ${getTotalBalance().toLocaleString()}` : 'Rp ****'}
+              </div>
+              <div className="text-xs opacity-75">
+                Available across all currencies
+              </div>
             </div>
           </div>
 
-          {/* Balance Breakdown */}
+          {/* Balance Breakdown - Compact Grid */}
           <div className="space-y-4 mb-6">
-            <h4 className="font-semibold text-walle-dark-blue">Balance Breakdown</h4>
-            <div className="grid grid-cols-2 gap-4">
-              {Object.entries(currentCard.balance).map(([currency, amount]) => (
-                <motion.div
-                  key={currency}
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-walle-soft rounded-xl p-4 text-center"
-                >
-                  <div className="text-xs text-walle-ocean-blue mb-1 uppercase font-medium">
-                    {currency}
-                  </div>
-                  <div className="text-lg font-bold text-walle-dark-blue">
-                    {showBalance ? formatCurrency(amount, currency) : '****'}
-                  </div>
-                </motion.div>
-              ))}
+            <h4 className="font-semibold text-slate-800 text-lg">Balance Breakdown</h4>
+            <div className="grid grid-cols-2 gap-3">
+              {Object.entries(currentCard.balance).map(([currency, amount], index) => {
+                const colors = [
+                  { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', icon: 'bg-emerald-500' },
+                  { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', icon: 'bg-blue-500' },
+                  { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', icon: 'bg-purple-500' },
+                  { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', icon: 'bg-orange-500' }
+                ];
+                const colorSet = colors[index % colors.length];
+                
+                return (
+                  <motion.div
+                    key={currency}
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    className={`${colorSet.bg} ${colorSet.border} border rounded-xl p-4 relative overflow-hidden`}
+                  >
+                    <div className={`absolute top-2 right-2 w-8 h-8 ${colorSet.icon} rounded-lg opacity-20`}></div>
+                    <div className="relative z-10">
+                      <div className={`text-xs ${colorSet.text} mb-2 uppercase font-semibold tracking-wide`}>
+                        {currency}
+                      </div>
+                      <div className={`text-lg font-bold ${colorSet.text}`}>
+                        {showBalance ? formatCurrency(amount, currency) : '****'}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 
-          {/* Card Limits Info */}
+          {/* Spending Limits - Modern Design */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-walle-dark-blue">Spending Limits</h4>
-            <div className="grid grid-cols-1 gap-3">
-              <div className="bg-walle-soft rounded-xl p-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-walle-ocean-blue">Daily Limit</span>
-                  <span className="font-semibold text-walle-dark-blue">
-                    Rp {currentCard.limits.daily.toLocaleString()}
-                  </span>
+            <div className="flex items-center gap-2">
+              <ShieldCheckIcon className="w-5 h-5 text-blue-600" />
+              <h4 className="font-semibold text-slate-800 text-lg">Spending Limits</h4>
+            </div>
+            
+            {/* Daily Limit with Progress */}
+            <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
+              <div className="flex justify-between items-center mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <ClockIcon className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-slate-800">Daily Limit</div>
+                    <div className="text-xs text-slate-600">24 hours</div>
+                  </div>
                 </div>
-                <div className="mt-2 bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-walle-gradient h-2 rounded-full transition-all duration-300"
-                    style={{ 
-                      width: `${Math.min((currentCard.currentLimitUsed / currentCard.limits.daily) * 100, 100)}%` 
-                    }}
-                  />
-                </div>
-                <div className="text-xs text-walle-ocean-blue mt-1">
-                  Used: Rp {currentCard.currentLimitUsed.toLocaleString()}
+                <div className="text-right">
+                  <div className="font-bold text-slate-800">
+                    Rp {(currentCard.limits.daily / 1000000).toFixed(1)}M
+                  </div>
+                  <div className="text-xs text-slate-600">
+                    Used: Rp {(currentCard.currentLimitUsed / 1000000).toFixed(1)}M
+                  </div>
                 </div>
               </div>
               
-              <div className="grid grid-cols-3 gap-2">
-                <div className="bg-walle-soft rounded-lg p-3 text-center">
-                  <div className="text-xs text-walle-ocean-blue">Weekly</div>
-                  <div className="text-sm font-semibold text-walle-dark-blue">
-                    {(currentCard.limits.weekly / 1000000).toFixed(0)}M
-                  </div>
-                </div>
-                <div className="bg-walle-soft rounded-lg p-3 text-center">
-                  <div className="text-xs text-walle-ocean-blue">Monthly</div>
-                  <div className="text-sm font-semibold text-walle-dark-blue">
-                    {(currentCard.limits.monthly / 1000000).toFixed(0)}M
-                  </div>
-                </div>
-                <div className="bg-walle-soft rounded-lg p-3 text-center">
-                  <div className="text-xs text-walle-ocean-blue">Yearly</div>
-                  <div className="text-sm font-semibold text-walle-dark-blue">
-                    {(currentCard.limits.yearly / 1000000).toFixed(0)}M
-                  </div>
-                </div>
+              <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                <motion.div 
+                  className={`h-3 rounded-full transition-all duration-500 ${
+                    (currentCard.currentLimitUsed / currentCard.limits.daily) * 100 > 80 
+                      ? 'bg-gradient-to-r from-red-500 to-red-600'
+                      : (currentCard.currentLimitUsed / currentCard.limits.daily) * 100 > 60
+                      ? 'bg-gradient-to-r from-amber-500 to-amber-600'
+                      : 'bg-gradient-to-r from-emerald-500 to-emerald-600'
+                  }`}
+                  initial={{ width: 0 }}
+                  animate={{ 
+                    width: `${Math.min((currentCard.currentLimitUsed / currentCard.limits.daily) * 100, 100)}%` 
+                  }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
               </div>
+              
+              <div className="flex justify-between items-center mt-2">
+                <span className="text-xs text-slate-600">
+                  {((currentCard.currentLimitUsed / currentCard.limits.daily) * 100).toFixed(1)}% used
+                </span>
+                {(currentCard.currentLimitUsed / currentCard.limits.daily) * 100 > 80 && (
+                  <span className="text-xs text-red-600 flex items-center gap-1">
+                    <ExclamationTriangleIcon className="w-3 h-3" />
+                    Near limit
+                  </span>
+                )}
+              </div>
+            </div>
+            
+            {/* Other Limits - Compact Cards */}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { key: 'weekly', name: 'Weekly', period: '7d', icon: CalendarIcon, color: 'emerald' },
+                { key: 'monthly', name: 'Monthly', period: '30d', icon: ChartBarIcon, color: 'purple' },
+                { key: 'yearly', name: 'Yearly', period: '365d', icon: Cog6ToothIcon, color: 'orange' }
+              ].map((limit) => (
+                <motion.div
+                  key={limit.key}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  className={`bg-${limit.color}-50 border border-${limit.color}-200 rounded-lg p-3 text-center`}
+                >
+                  <div className={`w-8 h-8 bg-${limit.color}-500 rounded-lg flex items-center justify-center mx-auto mb-2`}>
+                    <limit.icon className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-xs text-slate-600 mb-1">{limit.name}</div>
+                  <div className="text-xs text-slate-500 mb-2">{limit.period}</div>
+                  <div className={`text-sm font-bold text-${limit.color}-700`}>
+                    {(currentCard.limits[limit.key as keyof typeof currentCard.limits] / 1000000).toFixed(1)}M
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
@@ -293,36 +356,36 @@ export default function CardsSection() {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="xl:col-span-3 space-y-6"
       >
-{/* Tab Navigation - Redesigned */}
-<div className="bg-white rounded-2xl p-6 ">
+        {/* Tab Navigation - Redesigned */}
+        <div className="bg-white rounded-2xl p-4 ">
 
-  
-  {/* Modern Tab Style */}
-  <div className="flex flex-wrap gap-2 bg-gray-100 p-1 rounded-xl">
-    {tabs.map((tab) => (
-      <motion.button
-        key={tab.id}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={() => handleTabClick(tab.id)}
-        className={`flex-1 min-w-0 px-4 py-3 rounded-lg transition-all duration-300 font-medium text-sm ${
-          activeTab === tab.id
-            ? 'bg-white text-walle-dark-blue shadow-sm border border-gray-200'
-            : 'text-gray-600 hover:text-walle-dark-blue hover:bg-white/50'
-        }`}
-      >
-        <div className="flex items-center justify-center gap-2">
-          <tab.icon className={`w-4 h-4 ${
-            activeTab === tab.id ? 'text-walle-royal-blue' : 'text-gray-500'
-          }`} />
-          <span className="truncate">{tab.name}</span>
+          
+          {/* Modern Tab Style */}
+          <div className="flex flex-wrap gap-2 bg-gray-100 p-1 rounded-xl">
+            {tabs.map((tab) => (
+              <motion.button
+                key={tab.id}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleTabClick(tab.id)}
+                className={`flex-1 min-w-0 px-4 py-4 rounded-lg transition-all duration-300 font-medium text-sm ${
+                  activeTab === tab.id
+                    ? 'bg-white text-walle-dark-blue shadow-sm border border-gray-200'
+                    : 'text-gray-600 hover:text-walle-dark-blue hover:bg-white/50'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <tab.icon className={`w-4 h-4 ${
+                    activeTab === tab.id ? 'text-walle-royal-blue' : 'text-gray-500'
+                  }`} />
+                  <span className="truncate">{tab.name}</span>
+                </div>
+              </motion.button>
+            ))}
+          </div>
+          
+
         </div>
-      </motion.button>
-    ))}
-  </div>
-  
-
-</div>
 
         {/* Management Content */}
         <div className="bg-white rounded-3xl  min-h-[500px]">

@@ -108,17 +108,8 @@ export default function TransactionLog({ card }: TransactionLogProps) {
   };
 
   return (
-    <div className="p-6">
-      {/* Header - Compact */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="text-xl font-bold text-walle-dark-blue">Transaction Log</h3>
-          <p className="text-xs text-walle-ocean-blue">{card.name}</p>
-        </div>
-        <button className="p-2 rounded-lg bg-walle-soft text-walle-royal-blue hover:bg-walle-ice-blue transition-colors">
-          <DocumentArrowDownIcon className="w-4 h-4" />
-        </button>
-      </div>
+    <div className="px-5">
+
 
       {/* Compact Filters */}
       <div className="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-200">

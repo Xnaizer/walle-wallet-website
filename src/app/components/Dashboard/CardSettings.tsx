@@ -57,19 +57,10 @@ export default function CardSettings({ card }: CardSettingsProps) {
   };
 
   return (
-    <div className="p-6">
-      {/* Compact Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
+    <div className=" px-6">
 
-          <div>
-            <h3 className="text-xl font-bold text-walle-dark-blue">Card Settings</h3>
-            <p className="text-xs text-walle-ocean-blue">{card.name}</p>
-          </div>
-        </div>
-      </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Compact Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <motion.button

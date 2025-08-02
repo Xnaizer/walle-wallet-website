@@ -39,33 +39,73 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
 
-      // Update active section based on scroll position
+      // Improved active section detection
       const sections = [
         "hero",
-        "problem",
+        "problem", 
         "solution",
         "how-it-works",
         "features",
         "roadmap",
         "cta",
       ];
-      const navbarHeight = 96; // Navbar height in pixels
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const element = document.getElementById(sections[i]);
+      
+      const navbarHeight = 120; // Increased navbar offset for better detection
+      const scrollPosition = window.scrollY + navbarHeight;
+      
+      // Find the current section based on scroll position
+      let currentSection = "hero"; // default
+      
+      sections.forEach((sectionId) => {
+        const element = document.getElementById(sectionId);
         if (element) {
           const rect = element.getBoundingClientRect();
-          if (rect.top <= navbarHeight && rect.bottom > navbarHeight) {
-            setActiveSection(sections[i]);
-            break;
+          const elementTop = rect.top + window.scrollY;
+          const elementBottom = elementTop + element.offsetHeight;
+          
+          // Check if current scroll position is within this section
+          // Using a threshold to make the detection more accurate
+          const threshold = element.offsetHeight * 0.3; // 30% of section height
+          
+          if (scrollPosition >= elementTop - threshold && 
+              scrollPosition < elementBottom - threshold) {
+            currentSection = sectionId;
           }
         }
+      });
+      
+      // Special handling for the last section (cta)
+      const lastSection = document.getElementById("cta");
+      if (lastSection) {
+        const lastSectionTop = lastSection.getBoundingClientRect().top + window.scrollY;
+        if (scrollPosition >= lastSectionTop - navbarHeight) {
+          currentSection = "cta";
+        }
+      }
+      
+      // Special handling for hero section at the top
+      if (window.scrollY < 100) {
+        currentSection = "hero";
+      }
+      
+      setActiveSection(currentSection);
+    };
+
+    // Throttle scroll events for better performance
+    let ticking = false;
+    const throttledHandleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", throttledHandleScroll);
     handleScroll(); // Initial call
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", throttledHandleScroll);
   }, []);
 
   const navLinks = [
@@ -77,21 +117,28 @@ export default function Navbar() {
     { name: "Roadmap", href: "#roadmap" },
   ];
 
-  // Enhanced smooth scroll function
+  // Enhanced smooth scroll function with better offset calculation
   const smoothScrollTo = (elementId: string) => {
     const targetId = elementId.replace("#", "");
     const element = document.getElementById(targetId);
 
     if (element) {
-      const navbarHeight = 96; // Account for navbar height
-      const elementPosition =
-        element.getBoundingClientRect().top + window.pageYOffset;
-      const targetPosition = elementPosition - navbarHeight;
+      const navbarHeight = 100; // Consistent with detection logic
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      let targetPosition = elementPosition - navbarHeight;
+      
+      // Special handling for hero section
+      if (targetId === "hero") {
+        targetPosition = 0;
+      }
 
       window.scrollTo({
-        top: targetPosition,
+        top: Math.max(0, targetPosition), // Ensure we don't scroll to negative values
         behavior: "smooth",
       });
+      
+      // Immediately update active section for better UX
+      setActiveSection(targetId);
     }
     setIsOpen(false);
   };
@@ -173,19 +220,19 @@ export default function Navbar() {
                   );
                 })}
                 <Link href="/dashboard">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 0.8 }}
-                  transition={{ delay: 0.8 }}
-                  className="ml-6"
-                >
-                  <MagneticButton
-                    variant="primary"
-                    size="md"
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 0.8 }}
+                    transition={{ delay: 0.8 }}
+                    className="ml-6"
                   >
-                    Dashboard
-                  </MagneticButton>
-                </motion.div>
+                    <MagneticButton
+                      variant="primary"
+                      size="md"
+                    >
+                      Dashboard
+                    </MagneticButton>
+                  </motion.div>
                 </Link>
               </div>
 
@@ -267,8 +314,7 @@ export default function Navbar() {
 
                   <div className="flex flex-col space-y-2">
                     {navLinks.map((link, index) => {
-                      const isActive =
-                        activeSection === link.href.replace("#", "");
+                      const isActive = activeSection === link.href.replace("#", "");
                       return (
                         <motion.button
                           key={link.name}
@@ -302,13 +348,12 @@ export default function Navbar() {
                     transition={{ delay: 0.8 }}
                   >
                     <Link href="/dashboard">
-                    <MagneticButton
-                      variant="primary"
-                      className="w-full justify-center py-4 text-lg font-bold"
-                      
-                    >
-                      Dashboard
-                    </MagneticButton>
+                      <MagneticButton
+                        variant="primary"
+                        className="w-full justify-center py-4 text-lg font-bold"
+                      >
+                        Dashboard
+                      </MagneticButton>
                     </Link>
                   </motion.div>
                 </div>
