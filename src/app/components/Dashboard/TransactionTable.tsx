@@ -26,7 +26,7 @@ interface Transaction {
   time: string;
   coinType: string;
   amount: number;
-  type: 'received' | 'spending'; // Changed from 'send' to 'spending'
+  type: 'received' | 'spending';
   category?: string;
   recipient: string;
   status: 'done' | 'pending' | 'failed';
@@ -39,8 +39,8 @@ interface TransactionTableProps {
   startIndex?: number;
 }
 
-// Mapping kategori dengan key yang sesuai dengan data
-const categoryIcons: Record<string, JSX.Element> = {
+// Mapping kategori dengan React elements
+const categoryIcons: Record<string, React.ReactElement> = {
   "Food & Beverage": <ShoppingBagIcon className="w-4 h-4" />,
   "Transportation": <TruckIcon className="w-4 h-4" />,
   "Transfer": <ArrowPathIcon className="w-4 h-4" />,
@@ -52,10 +52,15 @@ const categoryIcons: Record<string, JSX.Element> = {
   "Salary": <CurrencyDollarIcon className="w-4 h-4" />,
   "Investment": <BanknotesIcon className="w-4 h-4" />,
   "received": <ArrowDownIcon className="w-4 h-4 text-green-600" />,
-  "spending": <ArrowUpIcon className="w-4 h-4 text-red-600" /> // Changed from 'send' to 'spending'
+  "spending": <ArrowUpIcon className="w-4 h-4 text-red-600" />
 };
 
-const statusConfig = {
+interface StatusConfig {
+  icon: React.ReactElement;
+  color: string;
+}
+
+const statusConfig: Record<string, StatusConfig> = {
   done: {
     icon: <CheckCircleIcon className="w-4 h-4" />,
     color: "bg-green-100 text-green-700 border-green-200"
@@ -68,7 +73,7 @@ const statusConfig = {
     icon: <XCircleIcon className="w-4 h-4" />,
     color: "bg-red-100 text-red-700 border-red-200"
   }
-} as const;
+};
 
 // Component untuk tabel transaksi yang bisa digunakan ulang
 const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, startIndex = 0 }) => {

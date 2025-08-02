@@ -261,7 +261,7 @@ export default function AddCardModal({ isOpen, onClose, onConfirm }: AddCardModa
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors"
+                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl cursor-pointer font-medium hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>

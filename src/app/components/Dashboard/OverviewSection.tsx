@@ -52,7 +52,7 @@ export default function OverviewSection() {
       >
         <div className="text-center">
           <div className="w-12 h-12 bg-walle-soft rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-walle-royal-blue transition-all duration-300">
-            <PlusIcon className="w-6 h-6 text-walle-royal-blue group-hover:text-white" />
+            <PlusIcon className="w-6 h-6 text-walle-royal-blue group-hover:text-black" />
           </div>
           <h3 className="text-lg font-semibold text-walle-dark-blue mb-1">
             Add New Card

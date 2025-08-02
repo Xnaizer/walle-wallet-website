@@ -84,6 +84,7 @@ export default function ProfileEditModal({ onClose }: ProfileEditModalProps) {
       onClose();
     } catch (err) {
       setError('Failed to update profile. Please try again.');
+      console.log(err)
     } finally {
       setIsSubmitting(false);
     }
