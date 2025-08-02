@@ -88,8 +88,8 @@ export default function SettingsSection() {
     {
       title: "Security",
       icon: ShieldCheckIcon,
-      color: "text-red-600",
-      bgColor: "bg-red-50",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
       items: [
         {
           id: "dashboard-pin",
@@ -104,8 +104,8 @@ export default function SettingsSection() {
     {
       title: "Privacy",
       icon: EyeIcon,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
       items: [
         {
           id: "show-balance",
@@ -130,8 +130,8 @@ export default function SettingsSection() {
     {
       title: "Notifications",
       icon: BellIcon,
-      color: "text-green-600",
-      bgColor: "bg-green-50",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
       items: [
         {
           id: "transaction-notifications",
@@ -165,8 +165,8 @@ export default function SettingsSection() {
     {
       title: "Support & Information",
       icon: InformationCircleIcon,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
       items: [
         {
           id: "product-info",
@@ -212,7 +212,7 @@ export default function SettingsSection() {
       >
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
           <div className="relative">
-            <div className="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center overflow-hidden">
+            <div className="w-20 h-20 bg-gradient-to-b from-primary-500 via-primary-500 to-primary-900 rounded-2xl flex items-center justify-center overflow-hidden">
               {state.user.profileImage ? (
                 <Image
                   src={state.user.profileImage}
@@ -232,9 +232,9 @@ export default function SettingsSection() {
           
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3">
-              <h2 className="text-2xl font-bold text-neutral-800">
+              <h3 className="text-2xl font-bold  bg-gradient-to-tl from-primary-600 via-primary-600 to-blue-700 bg-clip-text text-transparent">
                 {state.user.name}
-              </h2>
+              </h3>
               <button
                 onClick={() => setShowProfileEditModal(true)}
                 className="text-primary-600 hover:text-primary-700 transition-colors duration-300 p-1.5 hover:bg-primary-50 rounded-lg cursor-pointer"
@@ -276,10 +276,10 @@ export default function SettingsSection() {
           >
             {/* Group Header */}
             <div className="flex items-center gap-4 mb-6">
-              <div className={`w-12 h-12 ${group.bgColor} rounded-2xl flex items-center justify-center`}>
-                <group.icon className={`w-6 h-6 ${group.color}`} />
+              <div className={`w-12 h-12 bg-gradient-to-b from-primary-500 via-primary-500 to-yellow-300/80 rounded-2xl flex items-center justify-center`}>
+                <group.icon className={`w-6 h-6 text-white`} />
               </div>
-              <h2 className="text-xl font-bold text-neutral-800">{group.title}</h2>
+              <h3 className="text-xl font-bold  bg-gradient-to-tl from-primary-600 via-primary-600 to-blue-700 bg-clip-text text-transparent">{group.title}</h3>
             </div>
 
             {/* Group Items */}
@@ -302,7 +302,7 @@ export default function SettingsSection() {
                   
                   {/* Item Content */}
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-neutral-800 mb-1">
+                    <div className="font-semibold text-neutral-800 mb-1 ">
                       {item.name}
                     </div>
                     <div className="text-sm text-neutral-600 leading-relaxed">
@@ -351,10 +351,10 @@ export default function SettingsSection() {
         className="bg-white rounded-3xl p-6 md:p-8  border border-neutral-200/50 mt-8"
       >
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 bg-neutral-100 rounded-2xl flex items-center justify-center">
-            <InformationCircleIcon className="w-6 h-6 text-neutral-600" />
+          <div className="w-12 h-12  bg-gradient-to-b from-primary-500 via-primary-500 to-yellow-300/80  rounded-2xl flex items-center justify-center">
+            <InformationCircleIcon className="w-6 h-6 text-white" />
           </div>
-          <h2 className="text-xl font-bold text-neutral-800">App Information</h2>
+          <h3 className="text-xl font-bold  bg-gradient-to-tl from-primary-600 via-primary-600 to-blue-700 bg-clip-text text-transparent">App Information</h3>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

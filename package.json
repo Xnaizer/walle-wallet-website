@@ -10,12 +10,16 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@rainbow-me/rainbowkit": "^2.2.8",
+    "@tanstack/react-query": "^5.84.1",
     "framer-motion": "^12.23.12",
     "next": "15.4.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-intersection-observer": "^9.16.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "viem": "^2.33.2",
+    "wagmi": "^2.16.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
