@@ -38,7 +38,7 @@ export default function AddCardModal({
     "form" | "signing" | "submitting" | "success"
   >("form");
 
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const registerCardMutation = useRegisterCard();
   const { data: permissions } = useCardOperationPermissions();
 
