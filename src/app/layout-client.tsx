@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
 import React from "react";
 import { WagmiProvider } from "wagmi";
-import { wagmiConfig } from "./wagmi"; 
+import { wagmiConfig } from "./wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { XellarKitProvider, lightTheme } from "@xellar/kit";
-
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,15 +15,18 @@ const queryClient = new QueryClient({
   },
 });
 
-export default function RootLayoutClient({ children }: { children: React.ReactNode }) {
+export default function RootLayoutClient({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <XellarKitProvider theme={lightTheme}>
-          <div suppressHydrationWarning>
-            {children}
-          </div>
+          <div suppressHydrationWarning>{children}</div>
         </XellarKitProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </WagmiProvider>
   );

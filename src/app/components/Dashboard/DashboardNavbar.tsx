@@ -1,6 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import {
   HomeIcon,
   CreditCardIcon,
@@ -13,11 +18,12 @@ import {
   XMarkIcon,
   DocumentDuplicateIcon,
 } from "@heroicons/react/24/outline";
-import { useAccount, useDisconnect, useBalance } from 'wagmi';
-import { useConnectModal } from '@xellar/kit'; 
+import { useAccount, useDisconnect, useBalance } from "wagmi";
+import { useConnectModal } from "@xellar/kit";
 import { useDashboard } from "./DashboardContext";
 import Image from "next/image";
 import WalleLogo from "../../../../public/walle_logo.png";
+import { useEbiIdrcBalanceOf } from "src/app/hooks/useIdrc";
 
 // Define types
 interface BalanceData {
@@ -37,18 +43,25 @@ export default function DashboardNavbar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [copiedAddress, setCopiedAddress] = useState<boolean>(false);
-  
+
   const { scrollYProgress } = useScroll();
   const { address, isConnected, chain } = useAccount();
   const { disconnect } = useDisconnect();
-  
+
   // Use Xellar connect modal hook with correct API
   const { open: openConnectModal } = useConnectModal();
-  
+
   // Get balance with proper typing
   const { data: balance } = useBalance({
     address,
   });
+
+  const { data: idrcBalance } = useEbiIdrcBalanceOf({
+    args: [address as `0x${string}`],
+  });
+
+  console.log(idrcBalance);
+  console.log(balance);
 
   const navbarOpacity = useTransform(
     scrollYProgress,
@@ -70,15 +83,15 @@ export default function DashboardNavbar() {
   useEffect(() => {
     if (isConnected && address && !state.isWalletConnected) {
       dispatch({
-        type: 'CONNECT_WALLET',
-        payload: { 
-          address, 
-          hasPin: Math.random() > 0.5, 
-          isFirstTime: Math.random() > 0.5 
-        }
+        type: "CONNECT_WALLET",
+        payload: {
+          address,
+          hasPin: Math.random() > 0.5,
+          isFirstTime: Math.random() > 0.5,
+        },
       });
     } else if (!isConnected && state.isWalletConnected) {
-      dispatch({ type: 'DISCONNECT_WALLET' });
+      dispatch({ type: "DISCONNECT_WALLET" });
     }
   }, [isConnected, address, state.isWalletConnected, dispatch]);
 
@@ -94,22 +107,22 @@ export default function DashboardNavbar() {
 
   const navigationItems = [
     {
-      id: 'overview',
-      name: 'Overview',
+      id: "overview",
+      name: "Overview",
       icon: HomeIcon,
-      section: 'overview' as const,
+      section: "overview" as const,
     },
     {
-      id: 'cards',
-      name: 'Cards',
+      id: "cards",
+      name: "Cards",
       icon: CreditCardIcon,
-      section: 'cards' as const,
+      section: "cards" as const,
     },
     {
-      id: 'settings',
-      name: 'Settings',
+      id: "settings",
+      name: "Settings",
       icon: Cog6ToothIcon,
-      section: 'settings' as const,
+      section: "settings" as const,
     },
   ] as const;
 
@@ -118,7 +131,7 @@ export default function DashboardNavbar() {
     try {
       openConnectModal();
     } catch (error) {
-      console.error('Failed to open connect modal:', error);
+      console.error("Failed to open connect modal:", error);
     }
   };
 
@@ -128,8 +141,10 @@ export default function DashboardNavbar() {
     setIsOpen(false);
   };
 
-  const handleSectionChange = (section: 'overview' | 'cards' | 'settings'): void => {
-    dispatch({ type: 'SET_SECTION', payload: section });
+  const handleSectionChange = (
+    section: "overview" | "cards" | "settings"
+  ): void => {
+    dispatch({ type: "SET_SECTION", payload: section });
     setIsOpen(false);
   };
 
@@ -140,7 +155,7 @@ export default function DashboardNavbar() {
         setCopiedAddress(true);
         setTimeout(() => setCopiedAddress(false), 2000);
       } catch (err) {
-        console.error('Failed to copy address:', err);
+        console.error("Failed to copy address:", err);
       }
     }
   };
@@ -149,20 +164,45 @@ export default function DashboardNavbar() {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
-  const formatBalance = (bal: BalanceData | undefined): string => {
-    if (!bal) return 'Loading...';
-    const formatted = parseFloat(bal.formatted).toFixed(4);
-    return `${formatted} ${bal.symbol}`;
+  const formatBalance = (bal: any): string => {
+    if (bal === null || bal === undefined || isNaN(Number(bal))) {
+      return "Loading...";
+    }
+
+    const num = Number(bal.toString().slice(0, -2));
+
+    const tiers = [
+      { value: 1e9, symbol: "B" },
+      { value: 1e6, symbol: "M" },
+      { value: 1e3, symbol: "K" },
+    ];
+
+    const tier = tiers.find((t) => Math.abs(num) >= t.value);
+
+    let formatted;
+
+    if (tier) {
+      const val = num / tier.value;
+      const fixedVal = val.toFixed(2);
+
+      formatted = fixedVal + tier.symbol;
+    } else {
+      formatted = num.toString();
+    }
+
+    return `${formatted} IDRC`;
   };
 
   // Custom Connect Button Component
-  const CustomConnectButton: React.FC<CustomConnectButtonProps> = ({ mobile = false }) => {
+  const CustomConnectButton: React.FC<CustomConnectButtonProps> = ({
+    mobile = false,
+  }) => {
     if (!isConnected) {
       return (
         <motion.button
           onClick={handleConnectWallet}
           className={`flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer ${
-            mobile ? 'w-full justify-center px-6 py-4 text-lg' : 'px-5 py-2.5'
+            mobile ? "w-full justify-center px-6 py-4 text-lg" : "px-5 py-2.5"
           }`}
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
@@ -194,15 +234,15 @@ export default function DashboardNavbar() {
                   {address && formatAddress(address)}
                 </div>
                 <div className="text-sm text-neutral-600">
-                  {formatBalance(balance)}
+                  {formatBalance(idrcBalance as BalanceData)}
                 </div>
               </div>
             </div>
-            
+
             <div className="text-sm font-medium text-neutral-700 mb-2">
               Wallet Address
             </div>
-            <div 
+            <div
               className="flex items-center justify-between text-xs text-neutral-600 font-mono bg-white/70 rounded-lg px-3 py-2 cursor-pointer hover:bg-white/90 transition-colors"
               onClick={handleCopyAddress}
             >
@@ -218,13 +258,11 @@ export default function DashboardNavbar() {
                 <div className="text-sm font-medium text-neutral-700">
                   Network:
                 </div>
-                <div className="text-sm text-primary-600">
-                  {chain.name}
-                </div>
+                <div className="text-sm text-primary-600">{chain.name}</div>
               </div>
             )}
           </div>
-          
+
           <div className="flex gap-2 mb-4">
             <button
               onClick={handleCopyAddress}
@@ -233,7 +271,7 @@ export default function DashboardNavbar() {
               <DocumentDuplicateIcon className="w-5 h-5" />
               <span className="font-medium">Copy Address</span>
             </button>
-            
+
             <button
               onClick={handleDisconnectWallet}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-300 border border-red-200"
@@ -254,27 +292,29 @@ export default function DashboardNavbar() {
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-300 ${
               scrolled
-                ? 'bg-white/90 border-primary-200/50 hover:bg-primary-50 shadow-sm'
-                : 'bg-white/20 border-white/30 hover:bg-white/30'
+                ? "bg-white/90 border-primary-200/50 hover:bg-primary-50 shadow-sm"
+                : "bg-white/20 border-white/30 hover:bg-white/30"
             }`}
             whileHover={{ scale: 1.02 }}
           >
             <div className="w-9 h-9 bg-gradient-to-r from-primary-600 to-primary-700 rounded-full flex items-center justify-center shadow-lg">
               <UserIcon className="w-5 h-5 text-white" />
             </div>
-            
+
             <div className="text-left">
               <div className="text-sm font-semibold text-neutral-700">
                 {address && formatAddress(address)}
               </div>
               <div className="text-xs text-neutral-500">
-                {formatBalance(balance)}
+                {formatBalance(idrcBalance as BalanceData)}
               </div>
             </div>
-            
-            <ChevronDownIcon className={`w-4 h-4 text-neutral-500 transition-transform duration-300 ${
-              showProfileMenu ? 'rotate-180' : ''
-            }`} />
+
+            <ChevronDownIcon
+              className={`w-4 h-4 text-neutral-500 transition-transform duration-300 ${
+                showProfileMenu ? "rotate-180" : ""
+              }`}
+            />
           </motion.button>
 
           <AnimatePresence>
@@ -296,15 +336,15 @@ export default function DashboardNavbar() {
                         {address && formatAddress(address)}
                       </div>
                       <div className="text-sm text-neutral-600">
-                        {formatBalance(balance)}
+                        {formatBalance(idrcBalance)}
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="text-sm font-medium text-neutral-700 mb-1">
                     Wallet Address
                   </div>
-                  <div 
+                  <div
                     className="flex items-center justify-between text-xs text-neutral-600 font-mono bg-white/60 rounded-lg px-3 py-2 cursor-pointer hover:bg-white/90 transition-colors"
                     onClick={handleCopyAddress}
                   >
@@ -312,7 +352,9 @@ export default function DashboardNavbar() {
                     <DocumentDuplicateIcon className="w-4 h-4" />
                   </div>
                   {copiedAddress && (
-                    <div className="text-xs text-green-600 mt-1">Address copied!</div>
+                    <div className="text-xs text-green-600 mt-1">
+                      Address copied!
+                    </div>
                   )}
 
                   {chain && (
@@ -326,9 +368,9 @@ export default function DashboardNavbar() {
                     </div>
                   )}
                 </div>
-                
+
                 <div className="p-2">
-                  <button
+                  {/* <button
                     onClick={handleCopyAddress}
                     className="w-full flex items-center justify-between px-4 py-3 text-primary-600 hover:bg-primary-50 rounded-xl transition-colors duration-300 group"
                   >
@@ -336,8 +378,8 @@ export default function DashboardNavbar() {
                       <DocumentDuplicateIcon className="w-5 h-5" />
                       <span className="font-medium">Copy Address</span>
                     </div>
-                  </button>
-                  
+                  </button> */}
+
                   <button
                     onClick={handleDisconnectWallet}
                     className="w-full flex items-center justify-between px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-300 group"
@@ -383,7 +425,7 @@ export default function DashboardNavbar() {
               <motion.button
                 className="flex items-center gap-4 focus:outline-none cursor-pointer"
                 whileHover={{ scale: 1.02 }}
-                onClick={() => window.location.href = '/'}
+                onClick={() => (window.location.href = "/")}
               >
                 <motion.div
                   className="relative"
@@ -403,36 +445,37 @@ export default function DashboardNavbar() {
 
               {/* Desktop Navigation */}
               <div className="hidden lg:flex items-center gap-1">
-                {isConnected && navigationItems.map((item, index) => {
-                  const isActive = state.currentSection === item.section;
-                  return (
-                    <motion.button
-                      key={item.id}
-                      className={`relative px-4 py-2.5 font-semibold rounded-xl transition-all duration-300 cursor-pointer flex items-center gap-2 ${
-                        isActive
-                          ? "text-primary-700 bg-primary-50"
-                          : scrolled
-                          ? "text-neutral-700 hover:text-primary-700 hover:bg-primary-50/50"
-                          : "text-neutral-600 hover:text-primary-600 hover:bg-white/20"
-                      }`}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 + 0.2 }}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      onClick={() => handleSectionChange(item.section)}
-                    >
-                      <item.icon className="w-4 h-4" />
-                      {item.name}
-                      <motion.div
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-500 to-primary-700 rounded-full origin-center"
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: isActive ? 1 : 0 }}
-                        whileHover={{ scaleX: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    </motion.button>
-                  );
-                })}
+                {isConnected &&
+                  navigationItems.map((item, index) => {
+                    const isActive = state.currentSection === item.section;
+                    return (
+                      <motion.button
+                        key={item.id}
+                        className={`relative px-4 py-2.5 font-semibold rounded-xl transition-all duration-300 cursor-pointer flex items-center gap-2 ${
+                          isActive
+                            ? "text-primary-700 bg-primary-50"
+                            : scrolled
+                            ? "text-neutral-700 hover:text-primary-700 hover:bg-primary-50/50"
+                            : "text-neutral-600 hover:text-primary-600 hover:bg-white/20"
+                        }`}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 + 0.2 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        onClick={() => handleSectionChange(item.section)}
+                      >
+                        <item.icon className="w-4 h-4" />
+                        {item.name}
+                        <motion.div
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-500 to-primary-700 rounded-full origin-center"
+                          initial={{ scaleX: 0 }}
+                          animate={{ scaleX: isActive ? 1 : 0 }}
+                          whileHover={{ scaleX: 1 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </motion.button>
+                    );
+                  })}
               </div>
 
               {/* Right Side Actions */}
@@ -521,7 +564,9 @@ export default function DashboardNavbar() {
                       />
                       {isConnected && (
                         <div className="text-right">
-                          <div className="text-sm font-semibold text-neutral-700">Dashboard</div>
+                          <div className="text-sm font-semibold text-neutral-700">
+                            Dashboard
+                          </div>
                         </div>
                       )}
                     </div>
