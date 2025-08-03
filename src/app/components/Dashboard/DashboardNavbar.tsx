@@ -11,21 +11,44 @@ import {
   ChevronDownIcon,
   Bars3Icon,
   XMarkIcon,
+  DocumentDuplicateIcon,
 } from "@heroicons/react/24/outline";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useAccount, useDisconnect, useBalance } from 'wagmi';
+import { useConnectModal } from '@xellar/kit'; 
 import { useDashboard } from "./DashboardContext";
 import Image from "next/image";
 import WalleLogo from "../../../../public/walle_logo.png";
 
+// Define types
+interface BalanceData {
+  decimals: number;
+  formatted: string;
+  symbol: string;
+  value: bigint;
+}
+
+interface CustomConnectButtonProps {
+  mobile?: boolean;
+}
+
 export default function DashboardNavbar() {
   const { state, dispatch } = useDashboard();
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [scrolled, setScrolled] = useState<boolean>(false);
+  const [copiedAddress, setCopiedAddress] = useState<boolean>(false);
+  
   const { scrollYProgress } = useScroll();
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
   const { disconnect } = useDisconnect();
+  
+  // Use Xellar connect modal hook with correct API
+  const { open: openConnectModal } = useConnectModal();
+  
+  // Get balance with proper typing
+  const { data: balance } = useBalance({
+    address,
+  });
 
   const navbarOpacity = useTransform(
     scrollYProgress,
@@ -43,7 +66,7 @@ export default function DashboardNavbar() {
     ]
   );
 
-  // Sync wagmi state with dashboard context
+  // Sync wallet state with dashboard context
   useEffect(() => {
     if (isConnected && address && !state.isWalletConnected) {
       dispatch({
@@ -60,7 +83,7 @@ export default function DashboardNavbar() {
   }, [isConnected, address, state.isWalletConnected, dispatch]);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = (): void => {
       setScrolled(window.scrollY > 50);
     };
 
@@ -88,296 +111,248 @@ export default function DashboardNavbar() {
       icon: Cog6ToothIcon,
       section: 'settings' as const,
     },
-  ];
+  ] as const;
 
-  const handleDisconnectWallet = () => {
+  // Updated connect wallet function to use correct Xellar API
+  const handleConnectWallet = async (): Promise<void> => {
+    try {
+      openConnectModal();
+    } catch (error) {
+      console.error('Failed to open connect modal:', error);
+    }
+  };
+
+  const handleDisconnectWallet = (): void => {
     disconnect();
     setShowProfileMenu(false);
     setIsOpen(false);
   };
 
-  const handleSectionChange = (section: 'overview' | 'cards' | 'settings') => {
+  const handleSectionChange = (section: 'overview' | 'cards' | 'settings'): void => {
     dispatch({ type: 'SET_SECTION', payload: section });
     setIsOpen(false);
   };
 
+  const handleCopyAddress = async (): Promise<void> => {
+    if (address) {
+      try {
+        await navigator.clipboard.writeText(address);
+        setCopiedAddress(true);
+        setTimeout(() => setCopiedAddress(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy address:', err);
+      }
+    }
+  };
+
+  const formatAddress = (addr: string): string => {
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
+
+  const formatBalance = (bal: BalanceData | undefined): string => {
+    if (!bal) return 'Loading...';
+    const formatted = parseFloat(bal.formatted).toFixed(4);
+    return `${formatted} ${bal.symbol}`;
+  };
+
   // Custom Connect Button Component
-  const CustomConnectButton = ({ mobile = false }: { mobile?: boolean }) => {
-    return (
-      <ConnectButton.Custom>
-        {({
-          account,
-          chain,
-          openAccountModal,
-          openChainModal,
-          openConnectModal,
-          authenticationStatus,
-          mounted,
-        }) => {
-          const ready = mounted && authenticationStatus !== 'loading';
-          const connected =
-            ready &&
-            account &&
-            chain &&
-            (!authenticationStatus ||
-              authenticationStatus === 'authenticated');
+  const CustomConnectButton: React.FC<CustomConnectButtonProps> = ({ mobile = false }) => {
+    if (!isConnected) {
+      return (
+        <motion.button
+          onClick={handleConnectWallet}
+          className={`flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer ${
+            mobile ? 'w-full justify-center px-6 py-4 text-lg' : 'px-5 py-2.5'
+          }`}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <WalletIcon className={mobile ? "w-6 h-6" : "w-5 h-5"} />
+          <span className={mobile ? "" : "hidden sm:inline"}>
+            Connect Wallet
+          </span>
+        </motion.button>
+      );
+    }
 
-          return (
-            <div
-              {...(!ready && {
-                'aria-hidden': true,
-                'style': {
-                  opacity: 0,
-                  pointerEvents: 'none',
-                  userSelect: 'none',
-                },
-              })}
+    // Mobile connected state
+    if (mobile) {
+      return (
+        <motion.div
+          className="pt-4 border-t border-neutral-200"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-4 mb-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-primary-600 to-primary-700 rounded-full flex items-center justify-center shadow-lg">
+                <UserIcon className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <div className="text-base font-semibold text-neutral-800">
+                  {address && formatAddress(address)}
+                </div>
+                <div className="text-sm text-neutral-600">
+                  {formatBalance(balance)}
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-sm font-medium text-neutral-700 mb-2">
+              Wallet Address
+            </div>
+            <div 
+              className="flex items-center justify-between text-xs text-neutral-600 font-mono bg-white/70 rounded-lg px-3 py-2 cursor-pointer hover:bg-white/90 transition-colors"
+              onClick={handleCopyAddress}
             >
-              {(() => {
-                if (!connected) {
-                  return (
-                    <motion.button
-                      onClick={openConnectModal}
-                      className={`flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer ${
-                        mobile ? 'w-full justify-center px-6 py-4 text-lg' : 'px-5 py-2.5'
-                      }`}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <WalletIcon className={mobile ? "w-6 h-6" : "w-5 h-5"} />
-                      <span className={mobile ? "" : "hidden sm:inline"}>
-                        Connect Wallet
-                      </span>
-                    </motion.button>
-                  );
-                }
+              <span>{address && formatAddress(address)}</span>
+              <DocumentDuplicateIcon className="w-4 h-4" />
+            </div>
+            {copiedAddress && (
+              <div className="text-xs text-green-600 mt-1">Address copied!</div>
+            )}
 
-                if (chain.unsupported) {
-                  return (
-                    <motion.button
-                      onClick={openChainModal}
-                      className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      Wrong network
-                    </motion.button>
-                  );
-                }
+            {chain && (
+              <div className="mt-3 flex items-center gap-2">
+                <div className="text-sm font-medium text-neutral-700">
+                  Network:
+                </div>
+                <div className="text-sm text-primary-600">
+                  {chain.name}
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <div className="flex gap-2 mb-4">
+            <button
+              onClick={handleCopyAddress}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-primary-600 hover:bg-primary-50 rounded-xl transition-colors duration-300 border border-primary-200"
+            >
+              <DocumentDuplicateIcon className="w-5 h-5" />
+              <span className="font-medium">Copy Address</span>
+            </button>
+            
+            <button
+              onClick={handleDisconnectWallet}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-300 border border-red-200"
+            >
+              <ArrowRightOnRectangleIcon className="w-5 h-5" />
+              <span className="font-medium">Disconnect</span>
+            </button>
+          </div>
+        </motion.div>
+      );
+    }
 
-                if (mobile) {
-                  return (
-                    <motion.div
-                      className="pt-4 border-t border-neutral-200"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.8 }}
-                    >
-                      <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-4 mb-4">
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-12 h-12 bg-gradient-to-r from-primary-600 to-primary-700 rounded-full flex items-center justify-center shadow-lg">
-                            <UserIcon className="w-6 h-6 text-white" />
-                          </div>
-                          <div>
-                            <div className="text-base font-semibold text-neutral-800">
-                              {account.displayName}
-                            </div>
-                            <div className="text-sm text-neutral-600">
-                              {account.balanceFormatted ? `${account.balanceFormatted} ${account.balanceSymbol}` : 'Connected'}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="text-sm font-medium text-neutral-700 mb-2">
-                          Wallet Address
-                        </div>
-                        <div className="text-xs text-neutral-600 font-mono bg-white/70 rounded-lg px-3 py-2">
-                          {account.address.slice(0, 10)}...{account.address.slice(-8)}
-                        </div>
+    // Desktop connected state
+    return (
+      <div className="hidden lg:flex items-center gap-3">
+        <div className="relative">
+          <motion.button
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-300 ${
+              scrolled
+                ? 'bg-white/90 border-primary-200/50 hover:bg-primary-50 shadow-sm'
+                : 'bg-white/20 border-white/30 hover:bg-white/30'
+            }`}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="w-9 h-9 bg-gradient-to-r from-primary-600 to-primary-700 rounded-full flex items-center justify-center shadow-lg">
+              <UserIcon className="w-5 h-5 text-white" />
+            </div>
+            
+            <div className="text-left">
+              <div className="text-sm font-semibold text-neutral-700">
+                {address && formatAddress(address)}
+              </div>
+              <div className="text-xs text-neutral-500">
+                {formatBalance(balance)}
+              </div>
+            </div>
+            
+            <ChevronDownIcon className={`w-4 h-4 text-neutral-500 transition-transform duration-300 ${
+              showProfileMenu ? 'rotate-180' : ''
+            }`} />
+          </motion.button>
 
-                        {chain.hasIcon && (
-                          <div className="mt-3 flex items-center gap-2">
-                            <div className="text-sm font-medium text-neutral-700">
-                              Network:
-                            </div>
-                            <button
-                              onClick={openChainModal}
-                              className="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 transition-colors"
-                            >
-                              {chain.hasIcon && (
-                                <div
-                                  style={{
-                                    background: chain.iconBackground,
-                                    width: 20,
-                                    height: 20,
-                                    borderRadius: 999,
-                                    overflow: 'hidden',
-                                    marginRight: 4,
-                                  }}
-                                >
-                                  {chain.iconUrl && (
-                                    <Image
-                                      alt={chain.name ?? 'Chain icon'}
-                                      src={chain.iconUrl}
-                                      style={{ width: 20, height: 20 }}
-                                    />
-                                  )}
-                                </div>
-                              )}
-                              {chain.name}
-                            </button>
-                          </div>
-                        )}
+          <AnimatePresence>
+            {showProfileMenu && (
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="absolute right-0 mt-2 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-primary-200/30 overflow-hidden z-50"
+              >
+                <div className="p-4 border-b border-neutral-200/50 bg-gradient-to-r from-primary-50 to-primary-100">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-gradient-to-r from-primary-600 to-primary-700 rounded-full flex items-center justify-center shadow-lg">
+                      <UserIcon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-base font-semibold text-neutral-800">
+                        {address && formatAddress(address)}
                       </div>
-                      
-                      <div className="flex gap-2 mb-4">
-                        <button
-                          onClick={openAccountModal}
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-primary-600 hover:bg-primary-50 rounded-xl transition-colors duration-300 border border-primary-200"
-                        >
-                          <UserIcon className="w-5 h-5" />
-                          <span className="font-medium">Account</span>
-                        </button>
-                        
-                        <button
-                          onClick={handleDisconnectWallet}
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-300 border border-red-200"
-                        >
-                          <ArrowRightOnRectangleIcon className="w-5 h-5" />
-                          <span className="font-medium">Disconnect</span>
-                        </button>
+                      <div className="text-sm text-neutral-600">
+                        {formatBalance(balance)}
                       </div>
-                    </motion.div>
-                  );
-                }
-
-                return (
-                  <div className="hidden lg:flex items-center gap-3">
-                    <div className="relative">
-                      <motion.button
-                        onClick={() => setShowProfileMenu(!showProfileMenu)}
-                        className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-300 ${
-                          scrolled
-                            ? 'bg-white/90 border-primary-200/50 hover:bg-primary-50 shadow-sm'
-                            : 'bg-white/20 border-white/30 hover:bg-white/30'
-                        }`}
-                        whileHover={{ scale: 1.02 }}
-                      >
-                        <div className="w-9 h-9 bg-gradient-to-r from-primary-600 to-primary-700 rounded-full flex items-center justify-center shadow-lg">
-                          <UserIcon className="w-5 h-5 text-white" />
-                        </div>
-                        
-                        <div className="text-left">
-                          <div className="text-sm font-semibold text-neutral-700">
-                            {account.displayName}
-                          </div>
-                          <div className="text-xs text-neutral-500">
-                            {account.balanceFormatted ? `${account.balanceFormatted} ${account.balanceSymbol}` : 'Connected'}
-                          </div>
-                        </div>
-                        
-                        <ChevronDownIcon className={`w-4 h-4 text-neutral-500 transition-transform duration-300 ${
-                          showProfileMenu ? 'rotate-180' : ''
-                        }`} />
-                      </motion.button>
-
-                      <AnimatePresence>
-                        {showProfileMenu && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute right-0 mt-2 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-primary-200/30 overflow-hidden z-50"
-                          >
-                            <div className="p-4 border-b border-neutral-200/50 bg-gradient-to-r from-primary-50 to-primary-100">
-                              <div className="flex items-center gap-3 mb-3">
-                                <div className="w-12 h-12 bg-gradient-to-r from-primary-600 to-primary-700 rounded-full flex items-center justify-center shadow-lg">
-                                  <UserIcon className="w-6 h-6 text-white" />
-                                </div>
-                                <div>
-                                  <div className="text-base font-semibold text-neutral-800">
-                                    {account.displayName}
-                                  </div>
-                                  <div className="text-sm text-neutral-600">
-                                    {account.balanceFormatted ? `${account.balanceFormatted} ${account.balanceSymbol}` : 'Connected'}
-                                  </div>
-                                </div>
-                              </div>
-                              
-                              <div className="text-sm font-medium text-neutral-700 mb-1">
-                                Wallet Address
-                              </div>
-                              <div className="text-xs text-neutral-600 font-mono bg-white/60 rounded-lg px-3 py-2">
-                                {account.address.slice(0, 10)}...{account.address.slice(-8)}
-                              </div>
-
-                              {chain.hasIcon && (
-                                <div className="mt-3 flex items-center justify-between">
-                                  <div className="text-sm font-medium text-neutral-700">
-                                    Network
-                                  </div>
-                                  <button
-                                    onClick={openChainModal}
-                                    className="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 transition-colors"
-                                  >
-                                    {chain.hasIcon && (
-                                      <div
-                                        style={{
-                                          background: chain.iconBackground,
-                                          width: 20,
-                                          height: 20,
-                                          borderRadius: 999,
-                                          overflow: 'hidden',
-                                          marginRight: 4,
-                                        }}
-                                      >
-                                        {chain.iconUrl && (
-                                          <Image
-                                            alt={chain.name ?? 'Chain icon'}
-                                            src={chain.iconUrl}
-                                            style={{ width: 20, height: 20 }}
-                                          />
-                                        )}
-                                      </div>
-                                    )}
-                                    {chain.name}
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                            
-                            <div className="p-2">
-                              <button
-                                onClick={openAccountModal}
-                                className="w-full flex items-center justify-between px-4 py-3 text-primary-600 hover:bg-primary-50 rounded-xl transition-colors duration-300 group"
-                              >
-                                <div className="flex items-center gap-3">
-                                  <UserIcon className="w-5 h-5" />
-                                  <span className="font-medium">Account Details</span>
-                                </div>
-                              </button>
-                              
-                              <button
-                                onClick={handleDisconnectWallet}
-                                className="w-full flex items-center justify-between px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-300 group"
-                              >
-                                <div className="flex items-center gap-3">
-                                  <ArrowRightOnRectangleIcon className="w-5 h-5" />
-                                  <span className="font-medium">Disconnect Wallet</span>
-                                </div>
-                              </button>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
                     </div>
                   </div>
-                );
-              })()}
-            </div>
-          );
-        }}
-      </ConnectButton.Custom>
+                  
+                  <div className="text-sm font-medium text-neutral-700 mb-1">
+                    Wallet Address
+                  </div>
+                  <div 
+                    className="flex items-center justify-between text-xs text-neutral-600 font-mono bg-white/60 rounded-lg px-3 py-2 cursor-pointer hover:bg-white/90 transition-colors"
+                    onClick={handleCopyAddress}
+                  >
+                    <span>{address && formatAddress(address)}</span>
+                    <DocumentDuplicateIcon className="w-4 h-4" />
+                  </div>
+                  {copiedAddress && (
+                    <div className="text-xs text-green-600 mt-1">Address copied!</div>
+                  )}
+
+                  {chain && (
+                    <div className="mt-3 flex items-center justify-between">
+                      <div className="text-sm font-medium text-neutral-700">
+                        Network
+                      </div>
+                      <div className="text-sm text-primary-600">
+                        {chain.name}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="p-2">
+                  <button
+                    onClick={handleCopyAddress}
+                    className="w-full flex items-center justify-between px-4 py-3 text-primary-600 hover:bg-primary-50 rounded-xl transition-colors duration-300 group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <DocumentDuplicateIcon className="w-5 h-5" />
+                      <span className="font-medium">Copy Address</span>
+                    </div>
+                  </button>
+                  
+                  <button
+                    onClick={handleDisconnectWallet}
+                    className="w-full flex items-center justify-between px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-300 group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                      <span className="font-medium">Disconnect Wallet</span>
+                    </div>
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
     );
   };
 
@@ -395,12 +370,12 @@ export default function DashboardNavbar() {
               scrolled ? "border-white/20" : "border-white/10"
             }`}
             style={{
-              backdropFilter: `blur(${navbarBlur}px)`,
-              WebkitBackdropFilter: `blur(${navbarBlur}px)`,
+              backdropFilter: `blur(${navbarBlur.get()}px)`,
+              WebkitBackdropFilter: `blur(${navbarBlur.get()}px)`,
               backgroundColor: scrolled
                 ? `rgba(255, 255, 255, 0.95)`
-                : `rgba(255, 255, 255, ${navbarOpacity})`,
-              boxShadow: navbarShadow,
+                : `rgba(255, 255, 255, ${navbarOpacity.get()})`,
+              boxShadow: navbarShadow.get(),
             }}
           >
             <div className="flex items-center justify-between">
@@ -588,11 +563,7 @@ export default function DashboardNavbar() {
                   ) : null}
 
                   {/* Mobile Connect Button */}
-                  {!isConnected ? (
-                    <CustomConnectButton mobile />
-                  ) : (
-                    <CustomConnectButton mobile />
-                  )}
+                  <CustomConnectButton mobile />
                 </div>
               </motion.div>
             </motion.div>

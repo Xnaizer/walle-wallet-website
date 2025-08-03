@@ -1,16 +1,9 @@
-import { createConfig, http } from "wagmi";
-import { injected } from "wagmi/connectors";
+import { defaultConfig } from "@xellar/kit";
+import { type Config } from "wagmi";
 import { type Chain } from "viem";
 import { monadTestnet } from "viem/chains";
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 
-declare module "wagmi" {
-  interface Register {
-    config: typeof wagmiConfig;
-  }
-}
-
-const localhost = {
+export const localhost = {
   id: 31337,
   name: "HardHat",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
@@ -19,12 +12,13 @@ const localhost = {
   },
 } as const satisfies Chain;
 
-export const wagmiConfig = getDefaultConfig({
-  appName: 'Walle Wallet',
-  projectId: '7bb644316827fd25e86d0655d8964e24', // Dapatkan dari https://cloud.walletconnect.com
+const walletConnectProjectId = "dbaa6052f4e3126bf053d63cd0acc893"; // https://dashboard.reown.com/
+const xellarAppId = "8ca5013f-c527-4ba9-95ae-943c0f42f8eb";  //https://dashboard.xellar.co/
+
+export const wagmiConfig = defaultConfig({
+  appName: "Walle Wallet",
+  walletConnectProjectId,
+  xellarAppId,
+  xellarEnv: "sandbox", 
   chains: [localhost, monadTestnet],
-  transports: {
-    [localhost.id]: http(),
-    [monadTestnet.id]: http(),
-  },
-});
+}) as Config;

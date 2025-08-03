@@ -1,9 +1,7 @@
-// layout.tsx
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import RootLayoutClient from './layout-client'
-import '@rainbow-me/rainbowkit/styles.css';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -17,15 +15,12 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains-mono',
 })
 
-
 export const metadata: Metadata = {
   title: 'Walle Wallet - Your Everyday Payment Card',
   description: 'Tap. Pay. Done. Crypto Anywhere.',
-
   icons: {
     icon: { url: '/walle_logo.png' },
   },
-
   viewport: 'width=device-width, initial-scale=1',
   themeColor: '#2196f3',
 }
@@ -36,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com/" />
         <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="anonymous" />
@@ -49,7 +44,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Walle Wallet" />
       </head>
-      <body className="font-sans antialiased bg-white">
+      <body className="font-sans antialiased bg-white" suppressHydrationWarning>
         <RootLayoutClient>
           {children}
         </RootLayoutClient>
