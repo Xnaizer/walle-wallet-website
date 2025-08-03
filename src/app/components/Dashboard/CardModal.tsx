@@ -12,34 +12,36 @@ import {
 } from "@heroicons/react/24/outline";
 import { useAccount } from "wagmi";
 import {
+  useAccessCard,
   useCardOperationPermissions,
-  useRegisterCard,
 } from "src/app/hooks/useCardEIP712";
 
-interface AddCardModalProps {
+interface CardSignInModalProps {
   isOpen: boolean;
-  onClose: () => void;
-  onConfirm: (cardData: { cardId: string; pin: string }) => void;
+  onClose: (success?: boolean) => void;
+  onConfirm: (cardData: {
+    cardId: string;
+    pin: string;
+    secretKey: string;
+  }) => void;
 }
 
-export default function AddCardModal({
+export default function CardSignInModal({
   isOpen,
   onClose,
   onConfirm,
-}: AddCardModalProps) {
+}: CardSignInModalProps) {
   const [cardId, setCardId] = useState("");
   const [pin, setPin] = useState("");
-  const [confirmPin, setConfirmPin] = useState("");
   const [showPin, setShowPin] = useState(false);
-  const [showConfirmPin, setShowConfirmPin] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [registrationStep, setRegistrationStep] = useState<
+  const [signInStep, setSignInStep] = useState<
     "form" | "signing" | "submitting" | "success"
   >("form");
 
   const { address, isConnected } = useAccount();
-  const registerCardMutation = useRegisterCard();
+  const accessCardMutation = useAccessCard();
   const { data: permissions } = useCardOperationPermissions();
 
   const validateForm = () => {
@@ -59,17 +61,11 @@ export default function AddCardModal({
       newErrors.pin = "PIN must contain only numbers";
     }
 
-    if (!confirmPin) {
-      newErrors.confirmPin = "Please confirm your PIN";
-    } else if (pin !== confirmPin) {
-      newErrors.confirmPin = "PINs do not match";
-    }
-
     if (!isConnected) {
       newErrors.wallet = "Please connect your wallet first";
-    } else if (permissions && !permissions.canRegister) {
+    } else if (permissions && !permissions.canAccess) {
       newErrors.wallet =
-        permissions.reason || "Cannot register cards at this time";
+        permissions.reason || "Cannot access cards at this time";
     }
 
     setErrors(newErrors);
@@ -82,34 +78,35 @@ export default function AddCardModal({
     if (!validateForm()) return;
 
     setIsLoading(true);
-    setRegistrationStep("signing");
+    setSignInStep("signing");
 
     try {
-      const result = await registerCardMutation.mutateAsync({
+      const result = await accessCardMutation.mutateAsync({
         cardId: cardId.trim(),
         pin: pin,
       });
 
-      setRegistrationStep("success");
+      setSignInStep("success");
 
-      // Wait a bit to show success state
       setTimeout(() => {
         // Success - call the parent callback
         onConfirm({
           cardId: cardId.trim(),
           pin: pin,
+          secretKey: result.hsmKey as string,
         });
 
         // Reset form
         resetForm();
-        onClose();
+        onClose(true);
       }, 2000);
     } catch (error: any) {
-      console.error("Card registration error:", error);
+      console.error("Card sign in error:", error);
       setErrors({
-        general: error.message || "Failed to register card. Please try again.",
+        general:
+          error.message || "Failed to sign in with card. Please try again.",
       });
-      setRegistrationStep("form");
+      setSignInStep("form");
     } finally {
       setIsLoading(false);
     }
@@ -118,52 +115,51 @@ export default function AddCardModal({
   const resetForm = () => {
     setCardId("");
     setPin("");
-    setConfirmPin("");
     setErrors({});
-    setRegistrationStep("form");
+    setSignInStep("form");
   };
 
   const handleClose = () => {
-    if (!isLoading && !registerCardMutation.isPending) {
+    if (!isLoading && !accessCardMutation.isPending) {
       resetForm();
       onClose();
     }
   };
 
-  // Update registration step based on mutation state
+  // Update sign in step based on mutation state
   useEffect(() => {
-    if (registerCardMutation.isPending) {
+    if (accessCardMutation.isPending) {
       setIsLoading(true);
-      if (registrationStep === "form") {
-        setRegistrationStep("signing");
+      if (signInStep === "form") {
+        setSignInStep("signing");
       }
       // Check if we're in the submitting phase
       setTimeout(() => {
-        if (registerCardMutation.isPending && registrationStep === "signing") {
-          setRegistrationStep("submitting");
+        if (accessCardMutation.isPending && signInStep === "signing") {
+          setSignInStep("submitting");
         }
       }, 3000); // After 3 seconds of signing, assume we're submitting
     } else {
       setIsLoading(false);
     }
-  }, [registerCardMutation.isPending, registrationStep]);
+  }, [accessCardMutation.isPending, signInStep]);
 
   // Clear errors when mutation succeeds
   useEffect(() => {
-    if (registerCardMutation.isSuccess) {
+    if (accessCardMutation.isSuccess) {
       setErrors({});
     }
-  }, [registerCardMutation.isSuccess]);
+  }, [accessCardMutation.isSuccess]);
 
   // Handle mutation error
   useEffect(() => {
-    if (registerCardMutation.error) {
+    if (accessCardMutation.error) {
       setErrors({
-        general: registerCardMutation.error.message || "Registration failed",
+        general: accessCardMutation.error.message || "Sign in failed",
       });
-      setRegistrationStep("form");
+      setSignInStep("form");
     }
-  }, [registerCardMutation.error]);
+  }, [accessCardMutation.error]);
 
   if (!isOpen) return null;
 
@@ -192,12 +188,12 @@ export default function AddCardModal({
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <h3 className="text-xl font-bold text-walle-dark-blue flex items-center gap-3">
               <CreditCardIcon className="w-6 h-6 text-walle-royal-blue" />
-              {registrationStep === "form" && "Add New Card"}
-              {registrationStep === "signing" && "Sign Transaction"}
-              {registrationStep === "submitting" && "Registering Card"}
-              {registrationStep === "success" && "Registration Successful"}
+              {signInStep === "form" && "Sign In with Card"}
+              {signInStep === "signing" && "Sign Transaction"}
+              {signInStep === "submitting" && "Accessing Card"}
+              {signInStep === "success" && "Sign In Successful"}
             </h3>
-            {!isLoading && registrationStep !== "success" && (
+            {!isLoading && signInStep !== "success" && (
               <button
                 onClick={handleClose}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
@@ -209,7 +205,7 @@ export default function AddCardModal({
 
           {/* Modal Content */}
           <div className="p-6">
-            {registrationStep === "form" && (
+            {signInStep === "form" && (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* General Error */}
                 {errors.general && (
@@ -218,7 +214,7 @@ export default function AddCardModal({
                       <ExclamationTriangleIcon className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                       <div>
                         <h4 className="text-sm font-semibold text-red-800 mb-1">
-                          Registration Failed
+                          Sign In Failed
                         </h4>
                         <p className="text-xs text-red-600">{errors.general}</p>
                       </div>
@@ -269,7 +265,7 @@ export default function AddCardModal({
                 <div>
                   <label className="block text-sm font-semibold text-walle-dark-blue mb-2">
                     <LockClosedIcon className="w-4 h-4 inline mr-1" />
-                    Set PIN (6 digits)
+                    PIN (6 digits)
                   </label>
                   <div className="relative">
                     <input
@@ -305,49 +301,6 @@ export default function AddCardModal({
                   )}
                 </div>
 
-                {/* Confirm PIN Input */}
-                <div>
-                  <label className="block text-sm font-semibold text-walle-dark-blue mb-2">
-                    Confirm PIN
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showConfirmPin ? "text" : "password"}
-                      value={confirmPin}
-                      onChange={(e) =>
-                        setConfirmPin(
-                          e.target.value.replace(/\D/g, "").slice(0, 6)
-                        )
-                      }
-                      placeholder="Confirm your 6-digit PIN"
-                      className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all pr-12 ${
-                        errors.confirmPin
-                          ? "border-red-300 focus:ring-red-500"
-                          : "border-gray-300 focus:ring-walle-royal-blue"
-                      }`}
-                      maxLength={6}
-                      disabled={isLoading}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPin(!showConfirmPin)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                      disabled={isLoading}
-                    >
-                      {showConfirmPin ? (
-                        <EyeSlashIcon className="w-5 h-5" />
-                      ) : (
-                        <EyeIcon className="w-5 h-5" />
-                      )}
-                    </button>
-                  </div>
-                  {errors.confirmPin && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.confirmPin}
-                    </p>
-                  )}
-                </div>
-
                 {/* Action Buttons */}
                 <div className="flex gap-3 pt-4">
                   <button
@@ -364,20 +317,18 @@ export default function AddCardModal({
                     disabled={
                       isLoading ||
                       !isConnected ||
-                      registerCardMutation.isPending ||
-                      (permissions && !permissions.canRegister)
+                      accessCardMutation.isPending ||
+                      (permissions && !permissions.canAccess)
                     }
                   >
-                    {registerCardMutation.isPending
-                      ? "Processing..."
-                      : "Register Card"}
+                    {accessCardMutation.isPending ? "Processing..." : "Sign In"}
                   </button>
                 </div>
               </form>
             )}
 
             {/* Signing Step */}
-            {registrationStep === "signing" && (
+            {signInStep === "signing" && (
               <div className="text-center py-8">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <LockClosedIcon className="w-8 h-8 text-blue-600 animate-pulse" />
@@ -386,44 +337,44 @@ export default function AddCardModal({
                   Sign Transaction
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Please sign the transaction in your wallet to register your
+                  Please sign the transaction in your wallet to access your
                   card.
                 </p>
                 <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
                   <p className="text-sm text-yellow-700">
-                    Check your wallet for the signing request. This will create
-                    a cryptographic proof of your card registration.
+                    Check your wallet for the signing request. This will verify
+                    your card access permissions.
                   </p>
                 </div>
               </div>
             )}
 
             {/* Submitting Step */}
-            {registrationStep === "submitting" && (
+            {signInStep === "submitting" && (
               <div className="text-center py-8">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <div className="w-8 h-8 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
                 </div>
                 <h3 className="text-lg font-semibold text-walle-dark-blue mb-2">
-                  Registering Card
+                  Accessing Card
                 </h3>
                 <p className="text-gray-600">
-                  Processing your card registration on the blockchain...
+                  Verifying your card credentials on the blockchain...
                 </p>
               </div>
             )}
 
             {/* Success Step */}
-            {registrationStep === "success" && (
+            {signInStep === "success" && (
               <div className="text-center py-8">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircleIcon className="w-8 h-8 text-green-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-green-800 mb-2">
-                  Card Registered Successfully!
+                  Card Access Granted!
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Your card has been securely registered on the blockchain.
+                  You have successfully signed in with your card.
                 </p>
                 <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                   <div className="text-sm text-green-700">
